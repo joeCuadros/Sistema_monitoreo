@@ -1,0 +1,34 @@
+---------------------------------------------------
+create mon := new Monitor(23,10,2025)
+print mon.agregarEstudiante(mk_token(20223014), "Joe Jhonny", "Cuadros Amanqui", 7, 4, 2004)
+print mon.agregarEstudiante(mk_token(20223013), "Joe Jhonny", "Cuadros Amanqui 2", 7, 4, 2004)
+print mon.obtenerDatosEstudiante(mk_token(20223014))
+print mon.obtenerEdadEstudiante(mk_token(20223014))
+
+print mon.agregarDocente(mk_token(153), "Misael Josias", "Marron Lope")
+print mon.obtenerDatosDocente(mk_token(153))
+
+print mon.agregarCurso(mk_token("curso A"), mk_token(153))
+print mon.totalEstudiantesCurso(mk_token("curso A"))
+print mon.inscribirEstudiante(mk_token("curso A"), mk_token(20223014))
+print mon.inscribirEstudiante(mk_token("curso A"), mk_token(20223013))
+print mon.obtenerEstudiantesCurso(mk_token("curso A"))
+print mon.totalEstudiantesCurso(mk_token("curso A"))
+
+print mon.agregarEvaluacion(<Examen>, mk_token("curso A"), 24, 10, 2025)
+print mon.agregarNota(mk_token(1), mk_token(20223014), 20)
+print mon.obtenerNotas(mk_token(1))
+print mon.terminarEvaluacion(mk_token(1))
+print mon.obtenerEvaluacionesCurso(mk_token("curso A"))
+
+print mon.agregarAsistencia(mk_token("curso A"), 24, 10, 2025)
+print mon.registrarAsistencia(mk_token(1), mk_token(20223014))
+print mon.getAsistencias(mk_token(1))
+print mon.terminarAsistencia(mk_token(1))
+print mon.obtenerAsistenciasCurso(mk_token("curso A"))
+print mon.getAsistencias(mk_token(1))
+
+print mon.
+print mon.
+print mon.
+print mon.

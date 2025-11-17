@@ -1,0 +1,183 @@
+class Monitor
+
+types
+  -- variables del sistema
+  varSistema :: numEval: nat
+                numAsis: nat;
+
+  -- tipo de alertas
+  public tipoAlerta = <BajoRendimiento> | <Inasistencia> | <FaltaEvaluacion> | <AdvertenciaGeneral>;
+  public estadoAlerta = <Creado> | <Pendiente> | <Concluido> | <Archivado>;
+  
+  Alerta :: estudiante : token
+            curso: token
+            tipo: tipoAlerta
+            estado: estadoAlerta
+
+  
+instance variables
+  variable: varSistema := mk_varSistema(0, 0);
+  fecha_actual: Fecha;
+  estudiantes: map token to Estudiante := {|->};
+  docentes: map token to Docente := {|->};
+  cursos: map token to Curso := {|->};
+  evaluaciones: map token to Evaluacion := {|->};
+  asistencias: map token to Asistencia := {|->};
+
+operations
+-- constructor para Monitor
+public Monitor: nat * nat * nat ==> Monitor
+Monitor(dia, mes, anio) == (
+  fecha_actual := new Fecha(dia, mes, anio);
+);
+
+-------------------------------- sistema de Estudiantes -------------------------------- 
+-- agregar estudiante
+public agregarEstudiante: token * seq of char * seq of char * nat * nat * nat ==> ()
+agregarEstudiante(codigo, nombres, apellidos, dia, mes, anio) == (
+  estudiantes := estudiantes ++ {codigo |-> new Estudiante(codigo, nombres, apellidos, new Fecha(dia, mes, anio))};
+)
+pre codigo not in set dom estudiantes;
+-- obtener datos de un alumno
+public obtenerDatosEstudiante: token ==> seq of char
+obtenerDatosEstudiante(cod_est) == (
+  return estudiantes(cod_est).getDatos()
+)
+pre cod_est in set dom estudiantes;
+-- obtener edad de un alumno
+public obtenerEdadEstudiante: token ==> nat
+obtenerEdadEstudiante(cod_est) == (
+  return estudiantes(cod_est).getEdad(fecha_actual)
+)
+pre cod_est in set dom estudiantes;
+-------------------------------- sistema de Docentes -------------------------------- 
+-- agregar docente
+public agregarDocente: token * seq of char * seq of char ==> ()
+agregarDocente(codigo, nombres, apellidos) == (
+  docentes := docentes ++ {codigo |-> new Docente(codigo, nombres, apellidos)};
+)
+pre codigo not in set dom docentes;
+-- obtener datos de un docente
+public obtenerDatosDocente: token ==> seq of char
+obtenerDatosDocente(cod_doc) == (
+  return docentes(cod_doc).getDatos()
+)
+pre cod_doc in set dom docentes;
+-------------------------------- sistema de Cursos -------------------------------- 
+-- agregar curso con un profesor
+public agregarCurso: token * token ==> ()
+agregarCurso(codigo, cod_doc) == (
+  cursos := cursos ++ {codigo |-> new Curso(codigo, cod_doc)};
+)
+pre (codigo not in set dom cursos) and (cod_doc in set dom docentes);
+-- inscribir alumno a un curso
+public inscribirEstudiante: token * token ==> ()
+inscribirEstudiante(cod_cur, cod_est) == (
+  cursos(cod_cur).inscribirEstudiante(cod_est);
+)
+pre (cod_cur in set dom cursos) and (cod_est in set dom estudiantes);
+
+-- retirar alumno a un curso
+public retirarEstudiante: token * token ==> ()
+retirarEstudiante(cod_cur, cod_est) == (
+  cursos(cod_cur).retirarEstudiante(cod_est);
+)
+pre (cod_cur in set dom cursos) and (cod_est in set dom estudiantes);
+
+-- obtener alumnos de un curso
+public obtenerEstudiantesCurso: token ==> set of token
+obtenerEstudiantesCurso(cod_cur) == (
+  return cursos(cod_cur).getEstudiantes();
+)
+pre cod_cur in set dom cursos;
+
+-- total de alumnos de un curso
+public totalEstudiantesCurso: token ==> nat
+totalEstudiantesCurso(cod_cur) == (
+  return card cursos(cod_cur).getEstudiantes();
+)
+pre cod_cur in set dom cursos;
+-------------------------------- sistema de Evaluaciones -------------------------------- 
+-- agregar una evaluacion retorna codigo
+public agregarEvaluacion: Evaluacion`tipoEval * token * nat * nat * nat ==> nat
+agregarEvaluacion(t, cod_cur, dia, mes, anio) == (
+  variable.numEval := variable.numEval + 1;
+  evaluaciones := evaluaciones ++ {mk_token(variable.numEval) |-> new Evaluacion(t, cod_cur, new Fecha(dia, mes, anio))};
+  return variable.numEval
+)
+pre cod_cur in set dom cursos;
+-- agregar nota de la evaluacion
+public agregarNota: token * token * real ==> ()
+agregarNota(codigo, cod_est, nota) == (
+  dcl cod_cur: token := evaluaciones(codigo).getCurso();
+  if (cod_cur in set dom cursos) and (cursos(cod_cur).isMatriculado(cod_est)) -- validar si estudiante esta matriculado
+    then evaluaciones(codigo).agregarNota(cod_est, nota);
+)
+pre (codigo in set dom evaluaciones) and (cod_est in set dom estudiantes);
+-- obtener toda las notas
+public obtenerNotas: token ==> map token to real
+obtenerNotas(codigo) == (
+  evaluaciones(codigo).getNotas();
+)
+pre codigo in set dom evaluaciones;
+-- terminar la evaluacion
+public terminarEvaluacion: token ==> ()
+terminarEvaluacion(codigo) == (
+  evaluaciones(codigo).terminar();
+)
+pre codigo in set dom evaluaciones;
+-- obtener evaluaciones por curso
+public obtenerEvaluacionesCurso: token ==> set of token
+obtenerEvaluacionesCurso(cod_cur) == (
+  return {codigo | codigo in set dom evaluaciones & evaluaciones(codigo).getCurso() = cod_cur}
+)
+pre cod_cur in set dom cursos;
+-------------------------------- sistema de Asistencias -------------------------------- 
+-- agregar una asistencia retorna codigo
+public agregarAsistencia: token * nat * nat * nat ==> nat
+agregarAsistencia(cod_cur, dia, mes, anio) == (
+  variable.numAsis := variable.numAsis + 1;
+  asistencias := asistencias ++ {mk_token(variable.numAsis) |-> new Asistencia(cod_cur, new Fecha(dia, mes, anio))};
+  return variable.numAsis
+)
+pre cod_cur in set dom cursos;
+-- agregar asistencia
+public registrarAsistencia: token * token ==> ()
+registrarAsistencia(codigo, cod_est) == (
+  dcl cod_cur: token := asistencias(codigo).getCurso();
+  if (cod_cur in set dom cursos) and (cursos(cod_cur).isMatriculado(cod_est)) -- validar si estudiante esta matriculado
+    then asistencias(codigo).registrarAsistencia(cod_est, true);
+)
+pre (codigo in set dom asistencias) and (cod_est in set dom estudiantes);
+-- obtener toda las asistencias
+public getAsistencias: token ==> map token to bool
+getAsistencias(codigo) == (
+  asistencias(codigo).getAsistencias();
+)
+pre codigo in set dom asistencias;
+-- obtener evaluaciones por curso
+public obtenerAsistenciasCurso: token ==> set of token
+obtenerAsistenciasCurso(cod_cur) == (
+  return {codigo | codigo in set dom asistencias & asistencias(codigo).getCurso() = cod_cur}
+)
+pre cod_cur in set dom cursos;
+-- terminar las asistencias
+public terminarAsistencia: token ==> ()
+terminarAsistencia(codigo) == (
+  dcl cod_cur: token := asistencias(codigo).getCurso();
+  if cod_cur in set dom cursos then (
+    dcl ests: set of token := cursos(cod_cur).getEstudiantes();
+    dcl asis: map token to bool := asistencias(codigo).getAsistencias();
+    dcl est_falta: set of token := ests \ (dom asis);
+    for all est in set est_falta do (
+      asistencias(codigo).registrarAsistencia(est, false) -- marcar ausente
+    );
+    asistencias(codigo).terminar();
+  )
+)
+pre codigo in set dom asistencias;
+
+
+functions
+
+end Monitor

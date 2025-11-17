@@ -1,0 +1,59 @@
+class Evaluacion
+
+types
+  public tipoEval = <Examen> | <Practica> | <Tarea> | <Proyecto>;
+  public estadoEval = <Creado> | <Finalizado>;
+
+instance variables
+  tipo: tipoEval;
+  curso: token;
+  fecha: Fecha;
+  estado: estadoEval;
+  contenido: map token to real := {|->};
+  inv forall nota in set rng contenido & nota >= 0 and nota <= 20 
+
+operations
+-- constructor para Evaluacion
+public Evaluacion: tipoEval * token * Fecha ==> Evaluacion
+Evaluacion(t, cur, fec) == (
+  tipo := t;
+  curso := cur;
+  fecha := fec;
+  estado := <Creado>;
+);
+
+-- agregar nota al estudiante
+public agregarNota: token * real ==> ()
+agregarNota(cod_est, nota) == (
+  contenido := contenido ++ {cod_est |-> nota};
+)
+pre estado <> <Finalizado> and nota >= 0 and nota <= 20 and cod_est not in set dom contenido;
+
+-- obtener mapa de notas
+public getNotas: () ==> map token to real
+getNotas() == (
+  return contenido
+);
+
+-- obtener codigo de curso
+public getCurso: () ==> token
+getCurso() == (
+  return curso
+);
+
+-- terminar evaluacion
+public terminar: () ==> ()
+terminar() == (
+  estado := <Finalizado>;
+)
+pre estado = <Creado>;
+
+-- verficar si termino la evaluacion
+public termino: () ==> bool
+termino() == (
+  return estado = <Finalizado>
+);
+
+functions
+
+end Evaluacion

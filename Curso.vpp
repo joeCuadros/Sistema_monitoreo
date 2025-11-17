@@ -1,0 +1,43 @@
+class Curso
+
+instance variables
+  codigo: token;
+  docente: token; --codigo del docente
+  estudiantes: set of token := {}; --conjunto de estudiantes
+
+operations
+-- constructor for Curso
+public Curso: token * token ==> Curso
+Curso(cod, doc) == (
+  codigo := cod;
+  docente := doc;
+);
+-- inscribir estudiante
+public inscribirEstudiante: token ==> ()
+inscribirEstudiante(cod_est) == (
+  estudiantes := estudiantes union {cod_est};
+)
+pre cod_est not in set estudiantes;
+
+-- retirar estudiante
+public retirarEstudiante: token ==> ()
+retirarEstudiante(cod_est) == (
+  estudiantes := estudiantes \ {cod_est};
+)
+pre cod_est in set estudiantes;
+
+-- obtener estudiantes
+public getEstudiantes: () ==> set of token
+getEstudiantes() == (
+  return estudiantes
+);
+
+-- verficar si esta matricula el estudiante
+public isMatriculado: token ==> bool
+isMatriculado(cod_est) == (
+  return cod_est in set estudiantes
+);
+
+functions
+
+end Curso
