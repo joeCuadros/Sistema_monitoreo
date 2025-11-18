@@ -37,6 +37,15 @@ public isMatriculado: token ==> bool
 isMatriculado(cod_est) == (
   return cod_est in set estudiantes
 );
+-- obtener id docente
+public getDocente: () ==> token
+getDocente() == (
+  return docente
+);
+public getCodigo: () ==> token
+getCodigo() == (
+  return codigo
+);
 
 functions
 

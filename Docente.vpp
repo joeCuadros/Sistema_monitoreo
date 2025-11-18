@@ -16,12 +16,6 @@ Docente(cod, nom, ape) == (
 )
 pre len nom >= 3 and len ape >= 3;
 
--- retornar codigo
-public getCodigo: () ==> token
-getCodigo() == (
-  return codigo
-);
-
 -- obtener datos
 public getDatos: () ==> seq of char
 getDatos() == (
