@@ -72,7 +72,7 @@ class Curso {
 class Asistencia {
     - curso : token
     - fecha : Fecha
-    - estado : <Creado> | <Proceso> | <Finalizado>
+    - estado : Creado | Proceso | Finalizado
     - contenido : map token to bool
     + registrarAsistencia(cod_est : token, asistio : bool) ==> ()
     + getAsistencias() ==> map token to bool
@@ -82,10 +82,10 @@ class Asistencia {
 }
 
 class Evaluacion {
-    - tipo : <Examen> | <Practica> | <Tarea> | <Proyecto>;
+    - tipo : Examen | Practica | Tarea | Proyecto
     - curso : token
     - fecha : Fecha
-    - estado : <Creado> | <Proceso> | <Finalizado>
+    - estado : Creado | Proceso | Finalizado
     - contenido : map token to real
     + agregarNota(cod_est : token, nota : real) ==> ()
     + getAsistencias() ==> map token to real
@@ -98,14 +98,21 @@ class Alerta {
     - estudiante : token
     - docente : token
     - curso : token
-    - tipo : <BajoRendimiento> | <Inasistencia> 
-    | <FaltaEvaluacion> | <AdvertenciaGeneral>
+    - tipo : BajoRendimiento | Inasistencia | FaltaEvaluacion | AdvertenciaGeneral
     - descripcion : seq of char
-    - estado : <Creado> | <Pendiente> 
-    | <Concluido> | <Archivado>
+    - estado : Creado | Pendiente | Concluido | Archivado
     + esRepetido(est : token, doc : token, cod_cur : token, tip: tipoAlerta) ==> bool
     + terminar(estado_nuevo: estadoAlerta) ==> ()
     + verificarEstado(estado_verificar: estadoAlerta) ==> bool
+}
+
+class Monitor {
+    - estudiantes: map token to Estudiante
+    - docentes: map token to Docente
+    - cursos: map token to Curso
+    - evaluaciones: map token to Evaluacion
+    - asistencias: map token to Asistencia
+    - alertas: map token to Alerta
 }
 
 Estudiante --> Fecha : usa
@@ -121,5 +128,11 @@ Evaluacion ..> Curso : usa codigo
 Alerta ..> Estudiante : usa codigos
 Alerta ..> Docente : usa codigos
 Alerta ..> Curso : usa codigo
+Monitor --> Estudiante : contiene
+Monitor --> Docente : contiene
+Monitor --> Curso : contiene
+Monitor --> Evaluacion : contiene
+Monitor --> Asistencia : contiene
+Monitor --> Alerta : contiene
 ```
 
