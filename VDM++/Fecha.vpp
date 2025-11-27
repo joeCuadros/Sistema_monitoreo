@@ -1,0 +1,67 @@
+class Fecha
+
+instance variables
+  dia: nat;
+  mes: nat;
+  anio: nat;
+
+operations
+-- constructor para Fecha
+public Fecha: nat * nat * nat ==> Fecha
+Fecha(d, m, a) == (
+  dia := d;
+  mes := m;
+  anio := a;
+)
+pre isValido(d, m, a);
+
+public calcularDiferencia: Fecha ==> nat
+calcularDiferencia(fecha_nuevo) == (
+  dcl edad: nat := fecha_nuevo.getAnio() - anio;
+  if (fecha_nuevo.getMes() < mes) or (fecha_nuevo.getMes() = mes and fecha_nuevo.getDia() < dia) 
+    then edad := edad - 1; --si aun no cumple años descontar 1 año
+  return edad
+)
+pre isValido(fecha_nuevo.getDia(), fecha_nuevo.getMes(), fecha_nuevo.getAnio()) and (
+  fecha_nuevo.getAnio() > anio or
+  (fecha_nuevo.getAnio() = anio and fecha_nuevo.getMes() > mes) or
+  (fecha_nuevo.getAnio() = anio and fecha_nuevo.getMes() = mes and fecha_nuevo.getDia() >= dia));
+
+
+public getDia: () ==> nat
+getDia() == (
+  return dia
+);
+
+public getMes: () ==> nat
+getMes() == (
+  return mes
+);
+
+public getAnio: () ==> nat
+getAnio() == (
+  return anio
+);
+
+functions
+-- validar fecha
+isValido: nat * nat * nat -> bool
+isValido(dia, mes, anio) == (
+  (anio >= 1900) and (mes >= 1 and mes <= 12) and (dia >= 1 and dia <= diaMes(mes, anio))
+);
+-- retonar dia segun el mes
+diaMes: nat * nat -> nat
+diaMes(mes, anio) == (
+  if mes = 1 or mes = 3 or mes = 5 or mes = 7 or mes = 8 or mes = 10 or mes = 12
+    then 31
+  elseif mes = 2
+    then if isBisiesto(anio) then 29 else 28
+  else 30
+);
+-- Verifica si un año es bisiesto (divisible de 400 o divisible de 4 pero no de 100)
+isBisiesto: nat -> bool 
+isBisiesto (anio) == (
+  (anio mod 400 = 0) or ((anio mod 4 = 0) and (anio mod 100 <> 0))
+);
+
+end Fecha

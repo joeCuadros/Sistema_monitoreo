@@ -1,0 +1,37 @@
+class Test
+
+operations
+public ProbarFecha: () ==> ()
+ProbarFecha() == (
+  -- inicializar fechas
+  dcl fechaActual: Fecha := new Fecha(26,11,2025);
+  dcl caso1:  Fecha := new Fecha(5,12,2005);     -- mes antes, dias antes
+  dcl caso2:  Fecha := new Fecha(29,12,2005);    -- mes antes, dias despues
+  dcl caso3:  Fecha := new Fecha(24,11,2004);    -- mismo mes, dias antes
+  dcl caso4:  Fecha := new Fecha(27,11,2004);    -- mismo mes, dias despues
+  dcl caso5:  Fecha := new Fecha(2,9,2005);      -- mes despues, dias antes
+  dcl caso6:  Fecha := new Fecha(29,9,2005);     -- mes despues, dias despues
+  dcl caso7:  Fecha := new Fecha(7,4,2004);      -- bisiesto (multiplo de 4)
+  dcl caso8:  Fecha := new Fecha(28,2,1900);     -- no bisiesto (multiplo de 100)
+  dcl caso9:  Fecha := new Fecha(5,2,2000);      -- bisiesto (multiplo de 400)
+  dcl caso10: Fecha := new Fecha(5,2,2025);      -- mismo año, mes antes, dia antes
+  dcl caso11: Fecha := new Fecha(25,2,2025);     -- mismo año, mes antes, dia despues
+  dcl caso12: Fecha := new Fecha(5,11,2025);     -- mismo año, mes igual, dia antes
+  -- probar calcular diferencia
+  dcl dif:int := 0;
+  dif := caso1.calcularDiferencia(fechaActual);
+  dif := caso2.calcularDiferencia(fechaActual);
+  dif := caso3.calcularDiferencia(fechaActual);
+  dif := caso4.calcularDiferencia(fechaActual);
+  dif := caso5.calcularDiferencia(fechaActual);
+  dif := caso6.calcularDiferencia(fechaActual);
+  dif := caso7.calcularDiferencia(fechaActual);
+  dif := caso8.calcularDiferencia(fechaActual);
+  dif := caso9.calcularDiferencia(fechaActual);
+  dif := caso10.calcularDiferencia(fechaActual);
+  dif := caso11.calcularDiferencia(fechaActual);
+  dif := caso12.calcularDiferencia(fechaActual);
+  return;
+);
+
+end Test
