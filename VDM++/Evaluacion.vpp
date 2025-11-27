@@ -2,7 +2,7 @@ class Evaluacion
 
 types
   public tipoEval = <Examen> | <Practica> | <Tarea> | <Proyecto>;
-  public estadoEval = <Creado> | <Finalizado>;
+  public estadoEval = <Creado> | <Proceso> | <Finalizado>;
 
 instance variables
   tipo: tipoEval;
@@ -26,6 +26,7 @@ Evaluacion(t, cur, fec) == (
 public agregarNota: token * real ==> ()
 agregarNota(cod_est, nota) == (
   contenido := contenido ++ {cod_est |-> nota};
+  estado := <Proceso>;
 )
 pre estado <> <Finalizado> and nota >= 0 and nota <= 20 and cod_est not in set dom contenido;
 
@@ -46,7 +47,7 @@ public terminar: () ==> ()
 terminar() == (
   estado := <Finalizado>;
 )
-pre estado = <Creado>;
+pre estado <> <Finalizado>;
 
 -- verficar si termino la evaluacion
 public termino: () ==> bool

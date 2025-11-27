@@ -83,12 +83,29 @@ ProbarAsistencia() == (
   return;
 );
 
+public ProbarEvaluacion: () ==> ()
+ProbarEvaluacion() == (
+  dcl evaluacion: Evaluacion := new Evaluacion(<Examen>,mk_token("AFEV"),fechaActual); --codigo de curso
+  dcl registro: map token to real; 
+  dcl codigo: token;
+  dcl termino: bool;
+
+  evaluacion.agregarNota(mk_token("20220001"), 10); --codigo de estudiante
+  registro := evaluacion.getNotas();
+  codigo := evaluacion.getCurso();
+  evaluacion.terminar();
+  termino := evaluacion.termino();
+  return;
+);
+
 public ProbarTodos: () ==> ()
 ProbarTodos() == (
   ProbarFecha();
   ProbarEstudiante();
   ProbarDocente();
   ProbarCurso();
+  ProbarAsistencia();
+  ProbarEvaluacion();
 );
 
 
