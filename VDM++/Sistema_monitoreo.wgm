@@ -1,9 +1,9 @@
 FormatVersion:2
-mainW:0,23,1600,829,1
-browserW:0,0,320,400,0
+mainW:6,30,1588,834,1
+browserW:0,0,320,400,1
 codeW:200,30,800,400,0
-errorW:619,446,600,213,0
-interpreterW:217,10,788,680,0
+errorW:350,250,600,200,0
+interpreterW:361,29,800,500,0
 logW:300,300,600,150,0
 pogW:80,80,600,420,0
 optionsW:0,0,571,373,0

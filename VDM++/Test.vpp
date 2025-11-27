@@ -46,8 +46,25 @@ ProbarEstudiante() == (
 
 public ProbarDocente: () ==> ()
 ProbarDocente() == (
-  dcl docente: Docente := new Docente(mk_token(153), "Maribel ", "Molina");
+  dcl docente: Docente := new Docente(mk_token(1), "Maribel ", "Molina");
   dcl datos:seq of char := docente.getDatos();
+  return;
+);
+
+public ProbarCurso: () ==> ()
+ProbarCurso() == (
+  dcl curso: Curso := new Curso(mk_token("AFEV"), mk_token(1));
+  dcl estudiantes:set of token := {};
+  dcl matriculado:bool;
+  dcl datos:token;
+
+  curso.inscribirEstudiante(mk_token("1"));
+  curso.inscribirEstudiante(mk_token("2"));
+  curso.retirarEstudiante(mk_token("1"));
+  estudiantes := curso.getEstudiantes();
+  matriculado := curso.isMatriculado(mk_token("2"));
+  datos := curso.getDocente();
+  datos := curso.getCodigo();
   return;
 );
 
@@ -56,6 +73,7 @@ ProbarTodos() == (
   ProbarFecha();
   ProbarEstudiante();
   ProbarDocente();
+  ProbarCurso();
 );
 
 

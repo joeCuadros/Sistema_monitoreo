@@ -57,7 +57,21 @@ class Docente {
     + getDatos() : seq of char
 }
 
+class Curso {
+    - codigo : token
+    - docente : token
+    - estudiantes : set of token
+    + inscribirEstudiante(cod_est : token) : ()
+    + retirarEstudiante(cod_est : token) : ()
+    + getEstudiantes() : set of token
+    + isMatriculado(cod_est : token) : bool
+    + getDocente() : token
+    + getCodigo() : token
+}
+
 Estudiante --> Fecha : usa
 Docente --> Fecha : usa
+Curso ..> Estudiante : usa codigos
+Curso ..> Docente : usa codigo
 ```
 
