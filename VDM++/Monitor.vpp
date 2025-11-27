@@ -160,6 +160,105 @@ terminarAsistencia(codigo) == (
   )
 )
 pre codigo in set dom asistencias;
+-------------------------------- sistema de Alertas y Monitoreo -------------------------------- 
+-- LLENAR 
+-------------------------------- funciones extras para testear -------------------------------- 
+public cargarDatos:() ==> ()
+cargarDatos() == (
+  agregarEstudiante(mk_token(20223014), "Joe Jhonny", "Cuadros Amanqui", 7, 4, 2004);
+  agregarEstudiante(mk_token(20220575), "Misael Josias", "Marron Lope", 2, 3, 2004);
+  agregarEstudiante(mk_token(20222067), "Daniel Enrique", "Marron Carcausto", 1, 12, 2004);
+  agregarEstudiante(mk_token(20260001), "Joe", "Flores", 1, 2, 2004);
+  agregarEstudiante(mk_token(20260002), "Jorge", "Escobedo", 1, 2, 2000);
+  agregarEstudiante(mk_token(20260003), "Valentina", "Chambilla", 1, 2, 2003);
+  agregarDocente(mk_token(1), "Maribel ", "Molina");
+  agregarCurso(mk_token("AFEV"), mk_token(1));
+);
+public cargarInscripciones:() ==> ()
+cargarInscripciones() == (
+  inscribirEstudiante(mk_token("AFEV"), mk_token(20223014));
+  inscribirEstudiante(mk_token("AFEV"), mk_token(20220575));
+  inscribirEstudiante(mk_token("AFEV"), mk_token(20222067));
+  inscribirEstudiante(mk_token("AFEV"), mk_token(20260001));
+  inscribirEstudiante(mk_token("AFEV"), mk_token(20260002));
+  inscribirEstudiante(mk_token("AFEV"), mk_token(20260003));
+  retirarEstudiante(mk_token("AFEV"), mk_token(20260003));
+  inscribirEstudiante(mk_token("AFEV"), mk_token(20260003));
+);
+
+public cargarEvaluaciones: () ==> ()
+cargarEvaluaciones() == (
+  -- Evaluacion 1
+  dcl eval: token := agregarEvaluacion(<Proyecto>, mk_token("AFEV"), 6, 10, 2025);
+  agregarNota(eval, mk_token(20223014), 20); 
+  agregarNota(eval, mk_token(20220575), 17);
+  agregarNota(eval, mk_token(20222067), 14);
+  agregarNota(eval, mk_token(20260001), 11);
+  agregarNota(eval, mk_token(20260002), 8);
+  terminarEvaluacion(eval);
+  -- Evaluacion 2
+  eval := agregarEvaluacion(<Examen>, mk_token("AFEV"), 13, 10, 2025);
+  agregarNota(eval, mk_token(20223014), 15); 
+  agregarNota(eval, mk_token(20220575), 20);
+  agregarNota(eval, mk_token(20222067), 15);
+  agregarNota(eval, mk_token(20260001), 10);
+  agregarNota(eval, mk_token(20260002), 5);
+  agregarNota(eval, mk_token(20260003), 10);
+  terminarEvaluacion(eval);
+  -- Evaluacion 3
+  eval := agregarEvaluacion(<Examen>, mk_token("AFEV"), 20, 10, 2025);
+  agregarNota(eval, mk_token(20223014), 20); 
+  agregarNota(eval, mk_token(20220575), 8);
+  agregarNota(eval, mk_token(20222067), 5);
+  agregarNota(eval, mk_token(20260001), 12);
+  agregarNota(eval, mk_token(20260002), 15);
+  agregarNota(eval, mk_token(20260003), 10);
+  terminarEvaluacion(eval);
+  -- Evaluacion 4
+  eval := agregarEvaluacion(<Proyecto>, mk_token("AFEV"), 27, 10, 2025);
+  agregarNota(eval, mk_token(20223014), 18); 
+  agregarNota(eval, mk_token(20220575), 19);
+  agregarNota(eval, mk_token(20260002), 11);
+  agregarNota(eval, mk_token(20260003), 9);
+  terminarEvaluacion(eval);
+
+  return;
+);
+
+public cargarAsistencias: () ==> ()
+cargarAsistencias() == (
+  -- Asistencia 1
+  dcl asis: token := agregarAsistencia(mk_token("AFEV"), 6, 10, 2025);
+  registrarAsistencia(asis, mk_token(20223014));
+  registrarAsistencia(asis, mk_token(20222067));
+  registrarAsistencia(asis, mk_token(20260001));
+  registrarAsistencia(asis, mk_token(20260003));
+  terminarAsistencia(asis);
+  -- Asistencia 2
+  asis := agregarAsistencia(mk_token("AFEV"), 13, 10, 2025);
+  registrarAsistencia(asis, mk_token(20223014));
+  registrarAsistencia(asis, mk_token(20222067));
+  registrarAsistencia(asis, mk_token(20260002));
+  registrarAsistencia(asis, mk_token(20260003));
+  terminarAsistencia(asis);
+  -- Asistencia 3
+  asis := agregarAsistencia(mk_token("AFEV"), 20, 10, 2025);
+  registrarAsistencia(asis, mk_token(20223014));
+  registrarAsistencia(asis, mk_token(20222067));
+  registrarAsistencia(asis, mk_token(20220575));
+  registrarAsistencia(asis, mk_token(20260001));
+  registrarAsistencia(asis, mk_token(20260002));
+  registrarAsistencia(asis, mk_token(20260003));
+  terminarAsistencia(asis);
+  -- Asistencia 4
+  asis := agregarAsistencia(mk_token("AFEV"), 27, 10, 2025);
+  registrarAsistencia(asis, mk_token(20223014));
+  registrarAsistencia(asis, mk_token(20260002));
+  registrarAsistencia(asis, mk_token(20260003));
+  terminarAsistencia(asis);
+
+  return;
+);
 
   /* 
 
@@ -341,138 +440,6 @@ concluirAlerta(codigo) == (
 pre codigo in set dom alertas and (alertas(codigo).estado = <Pendiente>);
 
 -------------------------------- funciones extras para testear -------------------------------- 
-public cargarDatos:() ==> ()
-cargarDatos() == (
-  agregarEstudiante(mk_token(20223014), "Joe Jhonny", "Cuadros Amanqui", 7, 4, 2004);
-  agregarEstudiante(mk_token(20220575), "Misael Josias", "Marron Lope", 2, 3, 2004);
-  agregarEstudiante(mk_token(20222067), "Daniel Enrique", "Marron Carcausto", 1, 12, 2004);
-  agregarEstudiante(mk_token(20260001), "Joe", "Flores", 1, 2, 2004);
-  agregarEstudiante(mk_token(20260002), "Jorge", "Escobedo", 1, 2, 2000);
-  agregarEstudiante(mk_token(20260003), "Valentina", "Chambilla", 1, 2, 2003);
-  agregarDocente(mk_token(153), "Maribel ", "Molina");
-  agregarCurso(mk_token("AFEV"), mk_token(153));
-);
-
-public cargarFechas: () ==> nat
-cargarFechas() == (
-  dcl suma: nat := 0;
-
-  agregarEstudiante(mk_token(30000001), "Casos", "MesMenor", 20, 12, 2000);
-  agregarEstudiante(mk_token(30000002), "Casos", "DiaMenor", 17, 11, 2000);
-  agregarEstudiante(mk_token(30000003), "Casos", "MesMayor", 10, 10, 2000);
-  agregarEstudiante(mk_token(30000004), "Casos", "DiaMayor", 15, 11, 2000);
-  agregarEstudiante(mk_token(30000005), "Casos", "AnioMayor", 10, 10, 2010);
-  agregarEstudiante(mk_token(30000006), "Casos", "AnioMenor", 10, 10, 1990);
-  agregarEstudiante(mk_token(30000007), "Casos", "FechaIgual", 16, 11, 2000);
-  agregarEstudiante(mk_token(30000008), "Casos", "NacidoHoy", 16, 11, 2025);
-  agregarEstudiante(mk_token(30000009), "Casos", "UnDiaAntesCumple", 17, 11, 2005);
-  agregarEstudiante(mk_token(30000010), "Casos", "UnDiaDespuesCumple", 15, 11, 2005);
-  agregarEstudiante(mk_token(30000011), "Casos", "LimiteFebrero", 29, 2, 2004);
-  agregarEstudiante(mk_token(30000012), "Casos", "NoBisiesto28Feb", 28, 2, 2003);
-
-  suma := suma + obtenerEdadEstudiante(mk_token(30000001));
-  suma := suma + obtenerEdadEstudiante(mk_token(30000002));
-  suma := suma + obtenerEdadEstudiante(mk_token(30000003));
-  suma := suma + obtenerEdadEstudiante(mk_token(30000004));
-  suma := suma + obtenerEdadEstudiante(mk_token(30000005));
-  suma := suma + obtenerEdadEstudiante(mk_token(30000006));
-  suma := suma + obtenerEdadEstudiante(mk_token(30000007));
-  suma := suma + obtenerEdadEstudiante(mk_token(30000008));
-  suma := suma + obtenerEdadEstudiante(mk_token(30000009));
-  suma := suma + obtenerEdadEstudiante(mk_token(30000010));
-  suma := suma + obtenerEdadEstudiante(mk_token(30000011));
-  suma := suma + obtenerEdadEstudiante(mk_token(30000012));
-
-  return suma
-);
-
-
-public cargarInscripciones:() ==> ()
-cargarInscripciones() == (
-  inscribirEstudiante(mk_token("AFEV"), mk_token(20223014));
-  inscribirEstudiante(mk_token("AFEV"), mk_token(20220575));
-  inscribirEstudiante(mk_token("AFEV"), mk_token(20222067));
-  inscribirEstudiante(mk_token("AFEV"), mk_token(20260001));
-  inscribirEstudiante(mk_token("AFEV"), mk_token(20260002));
-  inscribirEstudiante(mk_token("AFEV"), mk_token(20260003));
-  retirarEstudiante(mk_token("AFEV"), mk_token(20260003));
-  inscribirEstudiante(mk_token("AFEV"), mk_token(20260003));
-);
-
-public cargarEvaluaciones: () ==> nat
-cargarEvaluaciones() == (
-  -- Evaluacion 1
-  dcl eval: nat := agregarEvaluacion(<Proyecto>, mk_token("AFEV"), 6, 10, 2025);
-  agregarNota(mk_token(eval), mk_token(20223014), 20); 
-  agregarNota(mk_token(eval), mk_token(20220575), 17);
-  agregarNota(mk_token(eval), mk_token(20222067), 14);
-  agregarNota(mk_token(eval), mk_token(20260001), 11);
-  agregarNota(mk_token(eval), mk_token(20260002), 8);
-  terminarEvaluacion(mk_token(eval));
-  -- Evaluacion 2
-  eval := agregarEvaluacion(<Examen>, mk_token("AFEV"), 13, 10, 2025);
-  agregarNota(mk_token(eval), mk_token(20223014), 15); 
-  agregarNota(mk_token(eval), mk_token(20220575), 20);
-  agregarNota(mk_token(eval), mk_token(20222067), 15);
-  agregarNota(mk_token(eval), mk_token(20260001), 10);
-  agregarNota(mk_token(eval), mk_token(20260002), 5);
-  agregarNota(mk_token(eval), mk_token(20260003), 10);
-  terminarEvaluacion(mk_token(eval));
-  -- Evaluacion 3
-  eval := agregarEvaluacion(<Examen>, mk_token("AFEV"), 20, 10, 2025);
-  agregarNota(mk_token(eval), mk_token(20223014), 20); 
-  agregarNota(mk_token(eval), mk_token(20220575), 8);
-  agregarNota(mk_token(eval), mk_token(20222067), 5);
-  agregarNota(mk_token(eval), mk_token(20260001), 12);
-  agregarNota(mk_token(eval), mk_token(20260002), 15);
-  agregarNota(mk_token(eval), mk_token(20260003), 10);
-  terminarEvaluacion(mk_token(eval));
-  -- Evaluacion 4
-  eval := agregarEvaluacion(<Proyecto>, mk_token("AFEV"), 27, 10, 2025);
-  agregarNota(mk_token(eval), mk_token(20223014), 18); 
-  agregarNota(mk_token(eval), mk_token(20220575), 19);
-  agregarNota(mk_token(eval), mk_token(20260002), 11);
-  agregarNota(mk_token(eval), mk_token(20260003), 9);
-  terminarEvaluacion(mk_token(eval));
-
-  return eval
-);
-
-public cargarAsistencias: () ==> nat
-cargarAsistencias() == (
-  -- Asistencia 1
-  dcl num_asis: nat := agregarAsistencia(mk_token("AFEV"), 6, 10, 2025);
-  registrarAsistencia(mk_token(num_asis), mk_token(20223014));
-  registrarAsistencia(mk_token(num_asis), mk_token(20222067));
-  registrarAsistencia(mk_token(num_asis), mk_token(20260001));
-  registrarAsistencia(mk_token(num_asis), mk_token(20260003));
-  terminarAsistencia(mk_token(num_asis));
-  -- Asistencia 2
-  num_asis := agregarAsistencia(mk_token("AFEV"), 13, 10, 2025);
-  registrarAsistencia(mk_token(num_asis), mk_token(20223014));
-  registrarAsistencia(mk_token(num_asis), mk_token(20222067));
-  registrarAsistencia(mk_token(num_asis), mk_token(20260002));
-  registrarAsistencia(mk_token(num_asis), mk_token(20260003));
-  terminarAsistencia(mk_token(num_asis));
-  -- Asistencia 3
-  num_asis := agregarAsistencia(mk_token("AFEV"), 20, 10, 2025);
-  registrarAsistencia(mk_token(num_asis), mk_token(20223014));
-  registrarAsistencia(mk_token(num_asis), mk_token(20222067));
-  registrarAsistencia(mk_token(num_asis), mk_token(20220575));
-  registrarAsistencia(mk_token(num_asis), mk_token(20260001));
-  registrarAsistencia(mk_token(num_asis), mk_token(20260002));
-  registrarAsistencia(mk_token(num_asis), mk_token(20260003));
-  terminarAsistencia(mk_token(num_asis));
-  -- Asistencia 4
-  num_asis := agregarAsistencia(mk_token("AFEV"), 27, 10, 2025);
-  registrarAsistencia(mk_token(num_asis), mk_token(20223014));
-  registrarAsistencia(mk_token(num_asis), mk_token(20260002));
-  registrarAsistencia(mk_token(num_asis), mk_token(20260003));
-  terminarAsistencia(mk_token(num_asis));
-
-  return num_asis
-);
-
 public cargarAlertas: () ==> ()
 cargarAlertas() == (
   validarAlerta(mk_token(1));
@@ -482,7 +449,6 @@ cargarAlertas() == (
   descartarAlerta(mk_token(3));
   validarAlerta(mk_token(4));
 );
-
 */
 
 end Monitor

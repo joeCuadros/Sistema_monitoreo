@@ -100,10 +100,44 @@ ProbarEvaluacion() == (
 
 public ProbarAlerta: () ==> ()
 ProbarAlerta() == (
-  dcl alerta: Alerta := new Alerta(mk_token("20220001"), mk_token("AFEV"), <BajoRendimiento>, "sin descripcion");
+  dcl alerta: Alerta := new Alerta(mk_token("20220001"),mk_token(1), mk_token("AFEV"), <BajoRendimiento>, "sin descripcion");
+  dcl alerta2: Alerta := new Alerta(mk_token("20220002"),mk_token(2), mk_token("AFEV"), <BajoRendimiento>, "sin descripcion");
   dcl esIgual: bool;
 
   esIgual := alerta.esRepetido(mk_token("20220001"), mk_token("AFEV"), <BajoRendimiento>);
+  alerta.terminar(<Concluido>);
+  alerta2.terminar(<Archivado>);
+  esIgual := alerta.esRepetido(mk_token("20220001"), mk_token("AFEV"), <BajoRendimiento>);
+  esIgual := alerta.verificarEstado(<Concluido>);
+  return;
+);
+
+public ProbarMonitor:() ==> ()
+ProbarMonitor() == (
+  dcl monitor:Monitor := new Monitor();
+  dcl nombre: seq of char;
+  dcl edad: nat;
+  dcl notas: map token to real;
+  dcl asistencias: map token to bool;
+  dcl conjunto: set of token;
+  dcl total: nat;
+
+  monitor.cargarDatos();
+  monitor.cargarInscripciones();
+  monitor.cargarEvaluaciones();
+  monitor.cargarAsistencias();
+
+  nombre := monitor.obtenerDatosEstudiante(mk_token(20223014));
+  edad := monitor.obtenerEdadEstudiante(mk_token(20223014));
+  nombre := monitor.obtenerDatosDocente(mk_token(1));
+  conjunto := monitor.obtenerEstudiantesCurso(mk_token("AFEV"));
+  total := monitor.totalEstudiantesCurso(mk_token("AFEV"));
+
+  notas := monitor.obtenerNotas(mk_token(1)); --codigo de la evaluacion
+  conjunto := monitor.obtenerEvaluacionesCurso(mk_token("AFEV")); --codigo de curso
+  asistencias := monitor.obtenerAsistencias(mk_token(1)); --codigo de la asistencia
+  conjunto := monitor.obtenerAsistenciasCurso(mk_token("AFEV")); --codigo de curso
+
   return;
 );
 
@@ -116,6 +150,7 @@ ProbarTodos() == (
   ProbarAsistencia();
   ProbarEvaluacion();
   ProbarAlerta();
+  ProbarMonitor();
 );
 
 
