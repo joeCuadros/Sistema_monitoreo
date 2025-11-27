@@ -94,6 +94,20 @@ class Evaluacion {
     + termino() ==> bool
 }
 
+class Alerta {
+    - estudiante : token
+    - docente : token
+    - curso : token
+    - tipo : <BajoRendimiento> | <Inasistencia> 
+    | <FaltaEvaluacion> | <AdvertenciaGeneral>
+    - descripcion : seq of char
+    - estado : <Creado> | <Pendiente> 
+    | <Concluido> | <Archivado>
+    + esRepetido(est : token, doc : token, cod_cur : token, tip: tipoAlerta) ==> bool
+    + terminar(estado_nuevo: estadoAlerta) ==> ()
+    + verificarEstado(estado_verificar: estadoAlerta) ==> bool
+}
+
 Estudiante --> Fecha : usa
 Docente --> Fecha : usa
 Curso ..> Estudiante : usa codigos
@@ -104,5 +118,8 @@ Asistencia ..> Curso : usa codigo
 Evaluacion --> Fecha : usa
 Evaluacion ..> Estudiante : usa codigos
 Evaluacion ..> Curso : usa codigo
+Alerta ..> Estudiante : usa codigos
+Alerta ..> Docente : usa codigos
+Alerta ..> Curso : usa codigo
 ```
 

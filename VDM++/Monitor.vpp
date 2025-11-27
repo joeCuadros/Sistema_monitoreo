@@ -1,39 +1,20 @@
 class Monitor
 
 types
-  -- variables del sistema
-  varSistema :: numEval: nat
-                numAsis: nat;
 
-  -- tipo de alertas
-  public tipoAlerta = <BajoRendimiento> | <Inasistencia> | <FaltaEvaluacion> | <AdvertenciaGeneral>;
-  public estadoAlerta = <Creado> | <Pendiente> | <Concluido> | <Archivado>;
-  
-  Alerta :: estudiante : token
-            curso: token
-            tipo: tipoAlerta
-            descripcion: seq of char
-            estado: estadoAlerta
-
-  
 instance variables
-  variable: varSistema := mk_varSistema(0, 0);
-  fecha_actual: Fecha;
+  -- datos iniciales
   estudiantes: map token to Estudiante := {|->};
   docentes: map token to Docente := {|->};
   cursos: map token to Curso := {|->};
   evaluaciones: map token to Evaluacion := {|->};
   asistencias: map token to Asistencia := {|->};
   alertas: map token to Alerta := {|->};
-  contador_alerta: nat := 0;
+  -- informacion 
+  fecha_actual: Fecha := new Fecha(26, 11, 2025);
+
 
 operations
--- constructor para Monitor
-public Monitor: nat * nat * nat ==> Monitor
-Monitor(dia, mes, anio) == (
-  fecha_actual := new Fecha(dia, mes, anio);
-);
-
 -------------------------------- sistema de Estudiantes -------------------------------- 
 -- agregar estudiante
 public agregarEstudiante: token * seq of char * seq of char * nat * nat * nat ==> ()
@@ -102,11 +83,11 @@ totalEstudiantesCurso(cod_cur) == (
 pre cod_cur in set dom cursos;
 -------------------------------- sistema de Evaluaciones -------------------------------- 
 -- agregar una evaluacion retorna codigo
-public agregarEvaluacion: Evaluacion`tipoEval * token * nat * nat * nat ==> nat
+public agregarEvaluacion: Evaluacion`tipoEval * token * nat * nat * nat ==> token
 agregarEvaluacion(t, cod_cur, dia, mes, anio) == (
-  variable.numEval := variable.numEval + 1;
-  evaluaciones := evaluaciones ++ {mk_token(variable.numEval) |-> new Evaluacion(t, cod_cur, new Fecha(dia, mes, anio))};
-  return variable.numEval
+  dcl codigo: nat := card dom evaluaciones + 1;
+  evaluaciones := evaluaciones ++ {mk_token(codigo) |-> new Evaluacion(t, cod_cur, new Fecha(dia, mes, anio))};
+  return mk_token(codigo)
 )
 pre cod_cur in set dom cursos;
 -- agregar nota de la evaluacion
@@ -137,11 +118,11 @@ obtenerEvaluacionesCurso(cod_cur) == (
 pre cod_cur in set dom cursos;
 -------------------------------- sistema de Asistencias -------------------------------- 
 -- agregar una asistencia retorna codigo
-public agregarAsistencia: token * nat * nat * nat ==> nat
+public agregarAsistencia: token * nat * nat * nat ==> token
 agregarAsistencia(cod_cur, dia, mes, anio) == (
-  variable.numAsis := variable.numAsis + 1;
-  asistencias := asistencias ++ {mk_token(variable.numAsis) |-> new Asistencia(cod_cur, new Fecha(dia, mes, anio))};
-  return variable.numAsis
+  dcl codigo: nat := card dom asistencias + 1;
+  asistencias := asistencias ++ {mk_token(codigo) |-> new Asistencia(cod_cur, new Fecha(dia, mes, anio))};
+  return mk_token(codigo)
 )
 pre cod_cur in set dom cursos;
 -- agregar asistencia
@@ -179,6 +160,9 @@ terminarAsistencia(codigo) == (
   )
 )
 pre codigo in set dom asistencias;
+
+  /* 
+
 -------------------------------- sistema de Alertas y Monitoreo -------------------------------- 
 private crearAlerta: token * token * seq of char * tipoAlerta ==> ()
 crearAlerta(cod_est, cod_cur, descripcion, tipo) == (
@@ -499,7 +483,6 @@ cargarAlertas() == (
   validarAlerta(mk_token(4));
 );
 
-
-functions
+*/
 
 end Monitor

@@ -98,6 +98,15 @@ ProbarEvaluacion() == (
   return;
 );
 
+public ProbarAlerta: () ==> ()
+ProbarAlerta() == (
+  dcl alerta: Alerta := new Alerta(mk_token("20220001"), mk_token("AFEV"), <BajoRendimiento>, "sin descripcion");
+  dcl esIgual: bool;
+
+  esIgual := alerta.esRepetido(mk_token("20220001"), mk_token("AFEV"), <BajoRendimiento>);
+  return;
+);
+
 public ProbarTodos: () ==> ()
 ProbarTodos() == (
   ProbarFecha();
@@ -106,6 +115,7 @@ ProbarTodos() == (
   ProbarCurso();
   ProbarAsistencia();
   ProbarEvaluacion();
+  ProbarAlerta();
 );
 
 
