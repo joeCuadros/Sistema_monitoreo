@@ -103,12 +103,22 @@ ProbarAlerta() == (
   dcl alerta: Alerta := new Alerta(mk_token("20220001"),mk_token(1), mk_token("AFEV"), <BajoRendimiento>, "sin descripcion");
   dcl alerta2: Alerta := new Alerta(mk_token("20220002"),mk_token(2), mk_token("AFEV"), <BajoRendimiento>, "sin descripcion");
   dcl esIgual: bool;
+  dcl tipo: Alerta`tipoAlerta;
+  dcl codigo: token;
 
   esIgual := alerta.esRepetido(mk_token("20220001"), mk_token("AFEV"), <BajoRendimiento>);
+  alerta.visto();
+  alerta2.visto();
   alerta.terminar(<Concluido>);
   alerta2.terminar(<Archivado>);
+  esIgual := alerta.termino();
+  esIgual := alerta2.termino();
   esIgual := alerta.esRepetido(mk_token("20220001"), mk_token("AFEV"), <BajoRendimiento>);
   esIgual := alerta.verificarEstado(<Concluido>);
+  tipo := alerta.getTipo();
+  codigo := alerta.getCurso();
+  codigo := alerta.getEstudiante();
+  codigo := alerta.getDocente();
   return;
 );
 
@@ -121,6 +131,7 @@ ProbarMonitor() == (
   dcl asistencias: map token to bool;
   dcl conjunto: set of token;
   dcl total: nat;
+  dcl alertas: map token to Alerta;
 
   monitor.cargarDatos();
   monitor.cargarInscripciones();
@@ -132,12 +143,22 @@ ProbarMonitor() == (
   nombre := monitor.obtenerDatosDocente(mk_token(1));
   conjunto := monitor.obtenerEstudiantesCurso(mk_token("AFEV"));
   total := monitor.totalEstudiantesCurso(mk_token("AFEV"));
-
   notas := monitor.obtenerNotas(mk_token(1)); --codigo de la evaluacion
   conjunto := monitor.obtenerEvaluacionesCurso(mk_token("AFEV")); --codigo de curso
   asistencias := monitor.obtenerAsistencias(mk_token(1)); --codigo de la asistencia
   conjunto := monitor.obtenerAsistenciasCurso(mk_token("AFEV")); --codigo de curso
 
+  monitor.analizarRiesgoSistema();
+  monitor.crearAlerta(mk_token(1),mk_token(20223014),mk_token("AFEV"),"sin descripcion",<AdvertenciaGeneral>);
+  alertas := monitor.obtenerAlertas();
+  alertas := monitor.obtenerTiposAlertas(<AdvertenciaGeneral>);
+  alertas := monitor.obtenerAlertasCurso(mk_token("AFEV"));
+  alertas := monitor.obtenerAlertasEstudiante(mk_token(20223014));
+  alertas := monitor.obtenerAlertasDocente(mk_token(1));
+  monitor.validarAlerta(mk_token(1));
+  monitor.validarAlerta(mk_token(2));
+  monitor.descartarAlerta(mk_token(1));
+  monitor.concluirAlerta(mk_token(2));
   return;
 );
 

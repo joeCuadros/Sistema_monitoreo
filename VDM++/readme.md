@@ -18,7 +18,7 @@ Casos de pruebas
 | calcularDiferencia | fecha = 25/02/2025 | mismo año, mes antes, dia despues|
 | calcularDiferencia | fecha = 05/12/2025 | mismo año, mes igual, dia antes|
 
-
+Codigo para hacer la prueba
 ```vpp
 tcov reset
 create test := new Test()
@@ -176,6 +176,10 @@ class Evaluacion {
     + getCurso() ==> token
     + terminar() ==> ()
     + termino() ==> bool
+    + getTipo() ==> tipoAlerta
+    + getCurso() ==> token
+    + getEstudiante() ==> token
+    + getDocente() ==> token
 }
 
 class Alerta {
@@ -187,6 +191,8 @@ class Alerta {
     - estado : Creado | Pendiente | Concluido | Archivado
     + esRepetido(est : token, doc : token, cod_cur : token, tip: tipoAlerta) ==> bool
     + terminar(estado_nuevo: estadoAlerta) ==> ()
+    + visto() ==> ()
+    + termino() ==> bool
     + verificarEstado(estado_verificar: estadoAlerta) ==> bool
 }
 
@@ -217,6 +223,15 @@ class Monitor {
     + obtenerAsistencias(codigo: token) ==> map token to bool
     + obtenerAsistenciasCurso(cod_cur: token) ==> set of token
     + terminarAsistencia(codigo: token) ==> ()
+    + crearAlerta(cod_doc: token, cod_est: token, cod_cur: token, descripcion: seq of char, tipo: tipoAlerta)
+    + analizarRiesgoSistema() ==> ()
+    + obtenerTiposAlertas(tipo: tipoAlerta) ==> map token to Alerta
+    + obtenerAlertasCurso(codigo: token) ==> map token to Alerta
+    + obtenerAlertasEstudiante(codigo: token) ==> map token to Alerta
+    + obtenerAlertasDocente(codigo: token) ==> map token to Alerta
+    + validarAlerta(codigo: token) ==> token
+    + descartarAlerta(codigo: token) ==> token
+    + concluirAlerta(codigo: token) ==> token
 }
 
 Estudiante --> Fecha : usa

@@ -14,9 +14,9 @@ instance variables
 
 operations
 public Alerta: token * token * token * tipoAlerta * seq of char ==> Alerta
-Alerta(est, doc, cod_cur, tip, des) == (
-  estudiante := est;
-  docente := doc;
+Alerta(cod_est, cod_doc, cod_cur, tip, des) == (
+  estudiante := cod_est;
+  docente := cod_doc;
   curso := cod_cur;
   tipo := tip;
   descripcion := des;
@@ -24,21 +24,52 @@ Alerta(est, doc, cod_cur, tip, des) == (
 );
 
 public esRepetido: token * token * tipoAlerta ==> bool
-esRepetido(est, cod_cur, tip) == (
+esRepetido(cod_est, cod_cur, tip) == (
   if (estado = <Concluido> or estado = <Archivado>)
     then return false;
-  return est = estudiante and cod_cur = curso and tip = tipo;
+  return cod_est = estudiante and cod_cur = curso and tip = tipo;
 );
 
 public terminar: estadoAlerta ==> ()
 terminar(estado_nuevo) == (
   estado := estado_nuevo;
 )
-pre estado_nuevo = <Concluido> or estado_nuevo = <Archivado>;
+pre (estado_nuevo = <Concluido> or estado_nuevo = <Archivado>) and estado = <Pendiente>;
+
+public visto: () ==> ()
+visto() == (
+  estado := <Pendiente>;
+)
+pre estado = <Creado>;
+
+public termino: () ==> bool
+termino() == (
+  return estado = <Concluido> or estado = <Archivado>;
+);
 
 public verificarEstado: estadoAlerta ==> bool
 verificarEstado(estado_verificar) == (
   return estado = estado_verificar;
+);
+
+public getTipo: () ==> tipoAlerta
+getTipo () == (
+  return tipo
+);
+
+public getCurso: () ==> token
+getCurso () == (
+  return curso
+);
+
+public getEstudiante: () ==> token
+getEstudiante () == (
+  return estudiante
+);
+
+public getDocente: () ==> token
+getDocente () == (
+  return docente
 );
 
 functions

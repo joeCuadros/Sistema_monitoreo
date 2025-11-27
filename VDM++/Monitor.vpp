@@ -161,7 +161,168 @@ terminarAsistencia(codigo) == (
 )
 pre codigo in set dom asistencias;
 -------------------------------- sistema de Alertas y Monitoreo -------------------------------- 
--- LLENAR 
+public crearAlerta: token * token * token * seq of char * Alerta`tipoAlerta ==> ()
+crearAlerta(cod_doc, cod_est, cod_cur, descripcion, tipo) == (
+  dcl alerta_existe: bool := exists alerta in set rng alertas & alerta.esRepetido(cod_est, cod_cur, tipo);
+  dcl codigo: nat := card dom alertas + 1;
+  -- validar si no existia una similar
+  if not alerta_existe 
+    then (
+      alertas := alertas ++ {mk_token(codigo) |-> new Alerta(cod_est, cod_doc, cod_cur, tipo, descripcion)}
+    )
+)
+pre cod_doc in set dom docentes and cod_est in set dom estudiantes and cod_cur in set dom cursos;
+
+public analizarRiesgoSistema: () ==> ()
+analizarRiesgoSistema() == (
+  -- parametros 
+  dcl UMBRAL_FALTAS: nat := 30;
+  dcl ASISTENCIAS_MINIMAS: nat := 2;
+  dcl UMBRAL_PROMEDIO: real := 10.5;
+  dcl EVALUACIONES_MINIMAS: nat := 2;
+
+  -- buscar todo los cursos
+  for all cod_cur in set dom cursos do (
+    dcl sesiones_curso: set of token := obtenerAsistenciasCurso(cod_cur); 
+    dcl estudiantes_curso: set of token := cursos(cod_cur).getEstudiantes(); 
+    dcl cod_doc:token := cursos(cod_cur).getDocente();
+    dcl evals_curso: set of token := obtenerEvaluacionesCurso(cod_cur); 
+
+    -- todo los estudiantes
+    for all cod_est in set estudiantes_curso do (
+      dcl faltas: nat := 0;
+      dcl total_asistencia: nat := 0;
+      dcl suma_notas: real := 0.0;
+      dcl num_eval: nat := 0;
+      dcl total_eval: nat := 0;
+
+      dcl porcentaje_falta: real;
+      dcl porcentaje_eval: real;
+      dcl promedio: real;
+
+      -- todas las asistencias
+      for all id_asis in set sesiones_curso do (
+        -- solo contar las terminadas
+        if asistencias(id_asis).termino() then (
+          dcl registro: map token to bool := asistencias(id_asis).getAsistencias(); 
+          total_asistencia := total_asistencia + 1;
+          if cod_est in set dom registro and registro(cod_est) = false then (
+            faltas := faltas + 1;
+          ) 
+        )
+      );
+
+      -- todas las evaluaciones
+      for all id_eval in set evals_curso do (
+        -- solo contar las evaluaciones
+        if evaluaciones(id_eval).termino() then ( 
+          dcl notas: map token to real := evaluaciones(id_eval).getNotas(); 
+          total_eval := total_eval + 1;
+          -- Si el estudiante tiene nota en esta evaluación
+          if cod_est in set dom notas then (
+            suma_notas := suma_notas + notas(cod_est);
+            num_eval := num_eval + 1;
+          )
+        )
+      );
+
+      -- tiene el minimo de asistencias totales
+      if total_asistencia >= ASISTENCIAS_MINIMAS then (
+        porcentaje_falta := (100.0 * faltas) / total_asistencia;
+        -- si esta debajo del umbral saltar alerta
+        if UMBRAL_FALTAS < porcentaje_falta then (
+          dcl descripcion: seq of char :=  "Razon: " ^ porcentaje_falta ^ "% de inasistencia";
+          crearAlerta(cod_doc,cod_est,cod_cur,descripcion,<Inasistencia>);
+        );
+      );
+
+      -- tiene el minimo de evaluaciones totales
+      if total_asistencia >= EVALUACIONES_MINIMAS then (
+        promedio := suma_notas / total_eval;
+        porcentaje_eval := (100.0 * faltas) / total_eval;
+        -- si esta debajo del umbral saltar alerta
+        if UMBRAL_PROMEDIO > promedio then (
+          dcl descripcion: seq of char :=  "Razon: " ^ promedio ^ " promedio del curso";
+          crearAlerta(cod_doc,cod_est,cod_cur,descripcion,<BajoRendimiento>);
+        );
+        -- si esta debajo del umbral saltar alerta
+        if UMBRAL_FALTAS < porcentaje_falta then (
+          dcl descripcion: seq of char :=  "Razon: " ^ porcentaje_falta ^ "% sin evaluaciones";
+          crearAlerta(cod_doc,cod_est,cod_cur,descripcion,<FaltaEvaluacion>);
+        );
+      );
+    ) 
+  )
+);
+public obtenerAlertas: () ==> map token to Alerta
+obtenerAlertas() == (
+  return alertas
+);
+
+public obtenerTiposAlertas: Alerta`tipoAlerta ==> map token to Alerta
+obtenerTiposAlertas(tipo) == (
+  dcl conjunto_alertas: set of Alerta := {};
+  -- extraer todas la alertas
+  for all alerta in set rng alertas do (
+    if alerta.getTipo() = tipo then (
+      conjunto_alertas := conjunto_alertas union {alerta};
+    )
+  );
+  return alertas :> conjunto_alertas 
+);
+public obtenerAlertasCurso: token ==> map token to Alerta
+obtenerAlertasCurso(codigo) == (
+  dcl conjunto_alertas: set of Alerta := {};
+  -- extraer todas la alertas
+  for all alerta in set rng alertas do (
+    if alerta.getCurso() = codigo then (
+      conjunto_alertas := conjunto_alertas union {alerta};
+    )
+  );
+  return alertas :> conjunto_alertas 
+)
+pre codigo in set dom cursos;
+public obtenerAlertasEstudiante: token ==> map token to Alerta
+obtenerAlertasEstudiante(codigo) == (
+  dcl conjunto_alertas: set of Alerta := {};
+  -- extraer todas la alertas
+  for all alerta in set rng alertas do (
+    if alerta.getEstudiante() = codigo then (
+      conjunto_alertas := conjunto_alertas union {alerta};
+    )
+  );
+  return alertas :> conjunto_alertas 
+)
+pre codigo in set dom estudiantes;
+public obtenerAlertasDocente: token ==> map token to Alerta
+obtenerAlertasDocente(codigo) == (
+  dcl conjunto_alertas: set of Alerta := {};
+  -- extraer todas la alertas
+  for all alerta in set rng alertas do (
+    if alerta.getDocente() = codigo then (
+      conjunto_alertas := conjunto_alertas union {alerta};
+    )
+  );
+  return alertas :> conjunto_alertas 
+)
+pre codigo in set dom docentes;
+
+public validarAlerta: token ==> ()
+validarAlerta(codigo) == (
+  alertas(codigo).visto();
+);
+
+public descartarAlerta: token ==> ()
+descartarAlerta(codigo) == (
+  alertas(codigo).terminar(<Archivado>);
+);
+
+public concluirAlerta: token ==> ()
+concluirAlerta(codigo) == (
+  alertas(codigo).terminar(<Concluido>);
+);
+
+
 -------------------------------- funciones extras para testear -------------------------------- 
 public cargarDatos:() ==> ()
 cargarDatos() == (
@@ -221,7 +382,6 @@ cargarEvaluaciones() == (
   agregarNota(eval, mk_token(20260002), 11);
   agregarNota(eval, mk_token(20260003), 9);
   terminarEvaluacion(eval);
-
   return;
 );
 
@@ -256,199 +416,7 @@ cargarAsistencias() == (
   registrarAsistencia(asis, mk_token(20260002));
   registrarAsistencia(asis, mk_token(20260003));
   terminarAsistencia(asis);
-
   return;
 );
-
-  /* 
-
--------------------------------- sistema de Alertas y Monitoreo -------------------------------- 
-private crearAlerta: token * token * seq of char * tipoAlerta ==> ()
-crearAlerta(cod_est, cod_cur, descripcion, tipo) == (
-  dcl alerta_existe: bool := exists id in set dom alertas &
-    alertas(id).estudiante = cod_est and
-    alertas(id).curso = cod_cur and
-    alertas(id).tipo = tipo and
-    (alertas(id).estado = <Creado> or alertas(id).estado = <Pendiente>);
-  -- validar si no existia una similar
-  if not alerta_existe then (
-    dcl nueva_alerta: Alerta := mk_Alerta(cod_est, cod_cur, tipo, descripcion, <Creado>);
-    contador_alerta := contador_alerta + 1;
-    alertas := alertas ++ {mk_token(contador_alerta) |-> nueva_alerta}
-  )
-);
-
-
-public analizarRiesgoSistema: () ==> ()
-analizarRiesgoSistema() == (
-  -- parametros 
-  dcl UMBRAL_FALTAS: nat := 30;
-  dcl ASISTENCIAS_MINIMAS: nat := 2;
-  dcl UMBRAL_PROMEDIO: real := 10.5;
-  dcl EVALUACIONES_MINIMAS: nat := 2;
-
-  -- buscar todo los cursos
-  for all cod_cur in set dom cursos do (
-    dcl sesiones_curso: set of token := obtenerAsistenciasCurso(cod_cur); 
-    dcl estudiantes_curso: set of token := cursos(cod_cur).getEstudiantes(); 
-    dcl evals_curso: set of token := obtenerEvaluacionesCurso(cod_cur); 
-
-    -- todo los estudiantes
-    for all cod_est in set estudiantes_curso do (
-      dcl faltas: nat := 0;
-      dcl total_asistencia: nat := 0;
-      dcl suma_notas: real := 0.0;
-      dcl num_eval: nat := 0;
-      dcl total_eval: nat := 0;
-
-      dcl porcentaje_falta: real;
-      dcl porcentaje_eval: real;
-      dcl promedio: real;
-
-      -- todas las asistencias
-      for all id_asis in set sesiones_curso do (
-        -- solo contar las terminadas
-        if asistencias(id_asis).termino() then (
-          dcl registro: map token to bool := asistencias(id_asis).getAsistencias(); 
-          total_asistencia := total_asistencia + 1;
-          if cod_est in set dom registro and registro(cod_est) = false then (
-            faltas := faltas + 1;
-          ) 
-        )
-      );
-
-      -- todas las evaluaciones
-      for all id_eval in set evals_curso do (
-        -- solo contar las evaluaciones
-        if evaluaciones(id_eval).termino() then ( 
-          dcl notas: map token to real := evaluaciones(id_eval).getNotas(); 
-          total_eval := total_eval + 1;
-          -- Si el estudiante tiene nota en esta evaluación
-          if cod_est in set dom notas then (
-            suma_notas := suma_notas + notas(cod_est);
-            num_eval := num_eval + 1;
-          )
-        )
-      );
-
-      -- tiene el minimo de asistencias totales
-      if total_asistencia >= ASISTENCIAS_MINIMAS then (
-        porcentaje_falta := (100.0 * faltas) / total_asistencia;
-        -- si esta debajo del umbral saltar alerta
-        if UMBRAL_FALTAS < porcentaje_falta then (
-          dcl descripcion: seq of char :=  "Razon: " ^ porcentaje_falta ^ "% de inasistencia";
-          crearAlerta(cod_est,cod_cur,descripcion,<Inasistencia>);
-        );
-      );
-
-      -- tiene el minimo de evaluaciones totales
-      if total_asistencia >= EVALUACIONES_MINIMAS then (
-        promedio := suma_notas / total_eval;
-        porcentaje_eval := (100.0 * faltas) / total_eval;
-        -- si esta debajo del umbral saltar alerta
-        if UMBRAL_PROMEDIO > promedio then (
-          dcl descripcion: seq of char :=  "Razon: " ^ promedio ^ " promedio del curso";
-          crearAlerta(cod_est,cod_cur,descripcion,<BajoRendimiento>);
-        );
-        -- si esta debajo del umbral saltar alerta
-        if UMBRAL_FALTAS < porcentaje_falta then (
-          dcl descripcion: seq of char :=  "Razon: " ^ porcentaje_falta ^ "% sin evaluaciones";
-          crearAlerta(cod_est,cod_cur,descripcion,<FaltaEvaluacion>);
-        );
-      );
-    ) 
-  )
-);
-
-public obtenerAlertas: () ==> map token to Alerta
-obtenerAlertas() == (
-  return alertas
-);
-public obtenerTiposAlertas: tipoAlerta ==> map token to Alerta
-obtenerTiposAlertas(tipo) == (
-  dcl conjunto_alertas: set of Alerta := {};
-  -- extraer todas la alertas
-  for all alerta in set rng alertas do (
-    if alerta.tipo = tipo then (
-      conjunto_alertas := conjunto_alertas union {alerta};
-    )
-  );
-  return alertas :> conjunto_alertas 
-);
-public obtenerAlertasCurso: token ==> map token to Alerta
-obtenerAlertasCurso(codigo) == (
-  dcl conjunto_alertas: set of Alerta := {};
-  -- extraer todas la alertas
-  for all alerta in set rng alertas do (
-    if alerta.curso = codigo then (
-      conjunto_alertas := conjunto_alertas union {alerta};
-    )
-  );
-  return alertas :> conjunto_alertas 
-)
-pre codigo in set dom cursos;
-public obtenerAlertasEstudiante: token ==> map token to Alerta
-obtenerAlertasEstudiante(codigo) == (
-  dcl conjunto_alertas: set of Alerta := {};
-  -- extraer todas la alertas
-  for all alerta in set rng alertas do (
-    if alerta.estudiante = codigo then (
-      conjunto_alertas := conjunto_alertas union {alerta};
-    )
-  );
-  return alertas :> conjunto_alertas 
-)
-pre codigo in set dom estudiantes;
-
-public obtenerAlertasDocente: token ==> map token to Alerta
-obtenerAlertasDocente(codigo) == (
-  dcl conjunto_cursos: set of token := {};
-  dcl conjunto_alertas: set of Alerta := {};
-  -- extraer todas los cursos
-  for all curso in set rng cursos do (
-    if curso.getDocente() = codigo then (
-      conjunto_cursos := conjunto_cursos union {curso.getCodigo()};
-    )
-  );
-
-  -- extraer todas la alertas
-  for all alerta in set rng alertas do (
-    if alerta.curso in set conjunto_cursos then (
-      conjunto_alertas := conjunto_alertas union {alerta};
-    )
-  );
-  return alertas :> conjunto_alertas 
-)
-pre codigo in set dom docentes;
-
-public validarAlerta: token ==> ()
-validarAlerta(codigo) == (
-  alertas(codigo).estado := <Pendiente>;
-)
-pre codigo in set dom alertas and alertas(codigo).estado = <Creado>;
-
-public descartarAlerta: token ==> ()
-descartarAlerta(codigo) == (
-  alertas(codigo).estado := <Archivado>;
-)
-pre codigo in set dom alertas and (alertas(codigo).estado = <Creado> or alertas(codigo).estado = <Pendiente>);
-
-public concluirAlerta: token ==> ()
-concluirAlerta(codigo) == (
-  alertas(codigo).estado := <Concluido>;
-)
-pre codigo in set dom alertas and (alertas(codigo).estado = <Pendiente>);
-
--------------------------------- funciones extras para testear -------------------------------- 
-public cargarAlertas: () ==> ()
-cargarAlertas() == (
-  validarAlerta(mk_token(1));
-  descartarAlerta(mk_token(2));
-  concluirAlerta(mk_token(1));
-  validarAlerta(mk_token(3));
-  descartarAlerta(mk_token(3));
-  validarAlerta(mk_token(4));
-);
-*/
 
 end Monitor
