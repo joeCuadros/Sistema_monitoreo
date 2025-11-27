@@ -23,6 +23,7 @@ Casos de pruebas
 tcov reset
 create test := new Test()
 print test.ProbarFecha()
+print test.ProbarEstudiante()
 tcov write vdm.tc
 rtinfo vdm.tc
 ```
@@ -32,12 +33,24 @@ rtinfo vdm.tc
 ```mermaid
 classDiagram
 class Fecha {
-    - nat dia
-    - nat mes
-    - nat anio
-    + getDia() nat
-    + getMes() nat
-    + getAnio() nat
-    + calcularDiferencia(fecha: Fecha) nat
+    - dia : nat
+    - mes : nat
+    - anio : nat
+    + getDia() : nat
+    + getMes() : nat
+    + getAnio() : nat
+    + calcularDiferencia(fecha : Fecha) : nat
 }
+
+class Estudiante {
+    - codigo : token
+    - nombres : seq of char
+    - apellidos : seq of char
+    - fecha_nacimiento : Fecha
+    + getDatos() : seq of char
+    + getEdad(fecha : Fecha) : nat
+}
+
+Estudiante --> Fecha : usa
 ```
+

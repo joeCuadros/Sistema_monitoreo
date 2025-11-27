@@ -1,10 +1,12 @@
 class Test
 
+instance variables
+  fechaActual: Fecha := new Fecha(26,11,2025);
+
 operations
 public ProbarFecha: () ==> ()
 ProbarFecha() == (
   -- inicializar fechas
-  dcl fechaActual: Fecha := new Fecha(26,11,2025);
   dcl caso1:  Fecha := new Fecha(5,12,2005);     -- mes antes, dias antes
   dcl caso2:  Fecha := new Fecha(29,12,2005);    -- mes antes, dias despues
   dcl caso3:  Fecha := new Fecha(24,11,2004);    -- mismo mes, dias antes
@@ -31,6 +33,14 @@ ProbarFecha() == (
   dif := caso10.calcularDiferencia(fechaActual);
   dif := caso11.calcularDiferencia(fechaActual);
   dif := caso12.calcularDiferencia(fechaActual);
+  return;
+);
+
+public ProbarEstudiante: () ==> ()
+ProbarEstudiante() == (
+  dcl estudiante: Estudiante := new Estudiante(mk_token("20223014"),"Joe","Cuadros",new Fecha(7,4,2004));
+  dcl datos:seq of char := estudiante.getDatos();
+  dcl edad:nat := estudiante.getEdad(fechaActual);
   return;
 );
 
