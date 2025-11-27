@@ -22,8 +22,7 @@ Casos de pruebas
 ```vpp
 tcov reset
 create test := new Test()
-print test.ProbarFecha()
-print test.ProbarEstudiante()
+print test.ProbarTodos()
 tcov write vdm.tc
 rtinfo vdm.tc
 ```
@@ -51,6 +50,14 @@ class Estudiante {
     + getEdad(fecha : Fecha) : nat
 }
 
+class Docente {
+    - codigo : token
+    - nombres : seq of char
+    - apellidos : seq of char
+    + getDatos() : seq of char
+}
+
 Estudiante --> Fecha : usa
+Docente --> Fecha : usa
 ```
 

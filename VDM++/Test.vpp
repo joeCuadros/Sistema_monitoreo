@@ -44,4 +44,19 @@ ProbarEstudiante() == (
   return;
 );
 
+public ProbarDocente: () ==> ()
+ProbarDocente() == (
+  dcl docente: Docente := new Docente(mk_token(153), "Maribel ", "Molina");
+  dcl datos:seq of char := docente.getDatos();
+  return;
+);
+
+public ProbarTodos: () ==> ()
+ProbarTodos() == (
+  ProbarFecha();
+  ProbarEstudiante();
+  ProbarDocente();
+);
+
+
 end Test
