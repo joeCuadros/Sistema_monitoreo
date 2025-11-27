@@ -81,6 +81,19 @@ class Asistencia {
     + termino() ==> bool
 }
 
+class Evaluacion {
+    - tipo : <Examen> | <Practica> | <Tarea> | <Proyecto>;
+    - curso : token
+    - fecha : Fecha
+    - estado : <Creado> | <Proceso> | <Finalizado>
+    - contenido : map token to real
+    + agregarNota(cod_est : token, nota : real) ==> ()
+    + getAsistencias() ==> map token to real
+    + getCurso() ==> token
+    + terminar() ==> ()
+    + termino() ==> bool
+}
+
 Estudiante --> Fecha : usa
 Docente --> Fecha : usa
 Curso ..> Estudiante : usa codigos
@@ -88,5 +101,8 @@ Curso ..> Docente : usa codigo
 Asistencia --> Fecha : usa
 Asistencia ..> Estudiante : usa codigos
 Asistencia ..> Curso : usa codigo
+Evaluacion --> Fecha : usa
+Evaluacion ..> Estudiante : usa codigos
+Evaluacion ..> Curso : usa codigo
 ```
 
