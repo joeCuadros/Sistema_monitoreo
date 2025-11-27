@@ -38,7 +38,7 @@ class Fecha {
     + getDia() : nat
     + getMes() : nat
     + getAnio() : nat
-    + calcularDiferencia(fecha : Fecha) : nat
+    + calcularDiferencia(fecha : Fecha) ==> nat
 }
 
 class Estudiante {
@@ -46,27 +46,27 @@ class Estudiante {
     - nombres : seq of char
     - apellidos : seq of char
     - fecha_nacimiento : Fecha
-    + getDatos() : seq of char
-    + getEdad(fecha : Fecha) : nat
+    + getDatos() ==> seq of char
+    + getEdad(fecha : Fecha) ==> nat
 }
 
 class Docente {
     - codigo : token
     - nombres : seq of char
     - apellidos : seq of char
-    + getDatos() : seq of char
+    + getDatos() ==> seq of char
 }
 
 class Curso {
     - codigo : token
     - docente : token
     - estudiantes : set of token
-    + inscribirEstudiante(cod_est : token) : ()
-    + retirarEstudiante(cod_est : token) : ()
-    + getEstudiantes() : set of token
-    + isMatriculado(cod_est : token) : bool
-    + getDocente() : token
-    + getCodigo() : token
+    + inscribirEstudiante(cod_est : token) ==> ()
+    + retirarEstudiante(cod_est : token) ==> ()
+    + getEstudiantes() ==> set of token
+    + isMatriculado(cod_est : token) ==> bool
+    + getDocente() ==> token
+    + getCodigo() ==> token
 }
 
 class Asistencia {
@@ -74,11 +74,11 @@ class Asistencia {
     - fecha : Fecha
     - estado : <Creado> | <Proceso> | <Finalizado>
     - contenido : map token to bool
-    + registrarAsistencia(cod_est : token, asistio : bool) : ()
-    + getAsistencias() : map token to bool
-    + getCurso : token
-    + terminar : ()
-    + termino : bool
+    + registrarAsistencia(cod_est : token, asistio : bool) ==> ()
+    + getAsistencias() ==> map token to bool
+    + getCurso() ==> token
+    + terminar() ==> ()
+    + termino() ==> bool
 }
 
 Estudiante --> Fecha : usa
