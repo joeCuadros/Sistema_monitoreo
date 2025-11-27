@@ -54,17 +54,32 @@ ProbarDocente() == (
 public ProbarCurso: () ==> ()
 ProbarCurso() == (
   dcl curso: Curso := new Curso(mk_token("AFEV"), mk_token(1));
-  dcl estudiantes:set of token := {};
+  dcl estudiantes:set of token;
   dcl matriculado:bool;
   dcl datos:token;
 
-  curso.inscribirEstudiante(mk_token("1"));
-  curso.inscribirEstudiante(mk_token("2"));
-  curso.retirarEstudiante(mk_token("1"));
+  curso.inscribirEstudiante(mk_token("20220001")); --codigo de estudiante
+  curso.inscribirEstudiante(mk_token("20220002")); --codigo de estudiante
+  curso.retirarEstudiante(mk_token("20220001")); --codigo de estudiante
   estudiantes := curso.getEstudiantes();
-  matriculado := curso.isMatriculado(mk_token("2"));
+  matriculado := curso.isMatriculado(mk_token("20220002")); --codigo de estudiante
   datos := curso.getDocente();
   datos := curso.getCodigo();
+  return;
+);
+
+public ProbarAsistencia: () ==> ()
+ProbarAsistencia() == (
+  dcl asistencia: Asistencia := new Asistencia(mk_token("AFEV"),fechaActual); --codigo de curso
+  dcl registro: map token to bool; 
+  dcl codigo: token;
+  dcl termino: bool;
+
+  asistencia.registrarAsistencia(mk_token("20220001"), true); --codigo de estudiante
+  registro := asistencia.getAsistencias();
+  codigo := asistencia.getCurso();
+  asistencia.terminar();
+  termino := asistencia.termino();
   return;
 );
 

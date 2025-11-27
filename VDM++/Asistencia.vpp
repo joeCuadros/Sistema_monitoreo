@@ -1,7 +1,7 @@
 class Asistencia
 
 types
-  public estadoAsis = <Creado> | <Finalizado>;
+  public estadoAsis = <Creado> | <Proceso> | <Finalizado>;
 
 instance variables
   curso: token;
@@ -21,6 +21,7 @@ Asistencia(cur, fec) == (
 public registrarAsistencia: token * bool ==> ()
 registrarAsistencia(cod_est, asistio) == (
   contenido := contenido ++ {cod_est |-> asistio};
+  estado := <Proceso>;
 )
 pre estado <> <Finalizado> and cod_est not in set dom contenido;
 -- obtener asistencias

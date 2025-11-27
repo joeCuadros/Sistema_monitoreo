@@ -69,9 +69,24 @@ class Curso {
     + getCodigo() : token
 }
 
+class Asistencia {
+    - curso : token
+    - fecha : Fecha
+    - estado : <Creado> | <Proceso> | <Finalizado>
+    - contenido : map token to bool
+    + registrarAsistencia(cod_est : token, asistio : bool) : ()
+    + getAsistencias() : map token to bool
+    + getCurso : token
+    + terminar : ()
+    + termino : bool
+}
+
 Estudiante --> Fecha : usa
 Docente --> Fecha : usa
 Curso ..> Estudiante : usa codigos
 Curso ..> Docente : usa codigo
+Asistencia --> Fecha : usa
+Asistencia ..> Estudiante : usa codigos
+Asistencia ..> Curso : usa codigo
 ```
 
