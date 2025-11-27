@@ -113,6 +113,26 @@ class Monitor {
     - evaluaciones: map token to Evaluacion
     - asistencias: map token to Asistencia
     - alertas: map token to Alerta
+    + agregarEstudiante(codigo: token, nombres: seq of char, apellidos: seq of char, dia: nat, mes: nat, anio: nat) ==> ()
+    + obtenerDatosEstudiante(cod_est: token) ==> seq of char
+    + obtenerEdadEstudiante(cod_est: token) ==> nat
+    + agregarDocente(codigo: token, nombres: seq of char, apellidos: seq of char) ==> ()
+    + obtenerDatosDocente(cod_est: token) ==> seq of char
+    + agregarCurso(codigo: token, cod_doc: token) ==> ()
+    + inscribirEstudiante(cod_cur: token, cod_est: token) ==> ()
+    + retirarEstudiante(cod_cur: token, cod_est: token) ==> ()
+    + obtenerEstudiantesCurso(cod_cur: token) ==> set of token
+    + totalEstudiantesCurso(cod_cur: token) ==> nat
+    + agregarEvaluacion(t:tipoEval, cod_cur: token, dia: nat, mes: nat, anio: nat) ==> token
+    + agregarNota(codigo: token, cod_est: token, nota: real) ==> ()
+    + obtenerNotas(codigo: token) ==> map token to real
+    + terminarEvaluacion(codigo: token) ==> ()
+    + obtenerEvaluacionesCurso(cod_cur: token) ==> set of token
+    + agregarAsistencia(cod_cur: token, dia: nat, mes: nat, anio: nat) ==> token
+    + registrarAsistencia(codigo: token, cod_est: token) ==> ()
+    + obtenerAsistencias(codigo: token) ==> map token to bool
+    + obtenerAsistenciasCurso(cod_cur: token) ==> set of token
+    + terminarAsistencia(codigo: token) ==> ()
 }
 
 Estudiante --> Fecha : usa
