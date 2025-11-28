@@ -4,85 +4,154 @@
 	<declaration>// Place global declarations here.
 </declaration>
 	<template>
-		<name x="5" y="5">Alerta</name>
-		<declaration>// Place local declarations here.
-clock t;</declaration>
-		<location id="id0" x="-178" y="0">
-			<name x="-188" y="-34">Creado</name>
+		<name>Monitor</name>
+		<parameter>bool &amp;iniciarEval, bool &amp;iniciarAsis, int &amp;numEval, int &amp;numAsis, bool &amp;iniciarAlerta, bool &amp;terminoAlerta</parameter>
+		<declaration>clock t;</declaration>
+		<location id="id0" x="-450" y="-51">
+			<name x="-460" y="-85">Iniciado</name>
 		</location>
-		<location id="id1" x="-42" y="0">
-			<name x="-52" y="-34">Pendiente</name>
+		<location id="id1" x="-306" y="-51">
+			<name x="-316" y="-85">Esperando</name>
 		</location>
-		<location id="id2" x="127" y="68">
-			<name x="117" y="34">Concluido</name>
+		<location id="id2" x="-170" y="-51">
+			<name x="-180" y="-85">Procesando</name>
 		</location>
-		<location id="id3" x="127" y="-85">
-			<name x="117" y="-119">Archivado</name>
+		<location id="id3" x="-25" y="-51">
+			<name x="-35" y="-85">Finalizado</name>
 		</location>
 		<init ref="id0"/>
 		<transition id="id4">
-			<source ref="id1"/>
-			<target ref="id2"/>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-153" y="-34">terminoAlerta == true</label>
 		</transition>
 		<transition id="id5">
 			<source ref="id1"/>
-			<target ref="id3"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-289" y="-34">numEval&gt;=3 &amp;&amp; 
+numAsis&gt;=3</label>
+			<label kind="assignment" x="-289" y="0">iniciarAlerta = true</label>
 		</transition>
 		<transition id="id6">
 			<source ref="id0"/>
 			<target ref="id1"/>
+			<label kind="assignment" x="-467" y="-34">iniciarEval = true,
+iniciarAsis = true</label>
 		</transition>
 	</template>
 	<template>
-		<name>Asistencia</name>
+		<name x="5" y="5">Alerta</name>
+		<parameter>bool &amp;iniciarAlerta, bool &amp;terminoAlerta</parameter>
 		<declaration>clock t;</declaration>
-		<location id="id7" x="-136" y="17">
-			<name x="-146" y="-17">Creado</name>
+		<location id="id7" x="-153" y="0">
+			<name x="-178" y="17">Creado</name>
 		</location>
-		<location id="id8" x="-8" y="17">
-			<name x="-18" y="-17">Proceso</name>
+		<location id="id8" x="-42" y="0">
+			<name x="-85" y="17">Pendiente</name>
 		</location>
-		<location id="id9" x="127" y="17">
-			<name x="117" y="-17">Finalizado</name>
+		<location id="id9" x="127" y="68">
+			<name x="110" y="85">Concluido</name>
 		</location>
-		<init ref="id7"/>
-		<transition id="id10">
+		<location id="id10" x="127" y="-85">
+			<name x="110" y="-119">Archivado</name>
+		</location>
+		<location id="id11" x="-153" y="-93">
+			<name x="-195" y="-127">NoExistente</name>
+		</location>
+		<init ref="id11"/>
+		<transition id="id12">
+			<source ref="id11"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-255" y="-68">iniciarAlerta == true</label>
+		</transition>
+		<transition id="id13">
 			<source ref="id8"/>
 			<target ref="id9"/>
+			<label kind="assignment" x="34" y="8">terminoAlerta = true</label>
 		</transition>
-		<transition id="id11">
+		<transition id="id14">
+			<source ref="id8"/>
+			<target ref="id10"/>
+			<label kind="assignment" x="34" y="-42">terminoAlerta = true</label>
+		</transition>
+		<transition id="id15">
 			<source ref="id7"/>
 			<target ref="id8"/>
 		</transition>
 	</template>
 	<template>
-		<name>Evaluacion</name>
+		<name>Asistencia</name>
+		<parameter>bool &amp;iniciarAsis, int &amp;numAsis</parameter>
 		<declaration>clock t;</declaration>
-		<location id="id12" x="-136" y="8">
-			<name x="-146" y="-26">Creado</name>
+		<location id="id16" x="-136" y="17">
+			<name x="-146" y="-17">Creado</name>
 		</location>
-		<location id="id13" x="0" y="8">
-			<name x="-10" y="-26">Proceso</name>
+		<location id="id17" x="17" y="17">
+			<name x="7" y="-17">Proceso</name>
 		</location>
-		<location id="id14" x="144" y="8">
-			<name x="134" y="-26">Finalizado</name>
+		<location id="id18" x="136" y="17">
+			<name x="126" y="-17">Finalizado</name>
 		</location>
-		<init ref="id12"/>
-		<transition id="id15">
-			<source ref="id12"/>
-			<target ref="id13"/>
+		<init ref="id16"/>
+		<transition id="id19">
+			<source ref="id17"/>
+			<target ref="id18"/>
+			<label kind="assignment" x="42" y="34">numAsis++,
+iniciarAsis = true</label>
 		</transition>
-		<transition id="id16">
-			<source ref="id13"/>
-			<target ref="id14"/>
+		<transition id="id20">
+			<source ref="id16"/>
+			<target ref="id17"/>
+			<label kind="guard" x="-144" y="34">iniciarAsis == true</label>
+			<label kind="assignment" x="-144" y="51">iniciarAsis = false</label>
 		</transition>
 	</template>
-	<system>// Place template instantiations here.
-alerta = Alerta();
-asistencia = Asistencia();
-evaluacion = Evaluacion();
-// List one or more processes to be composed into a system.
-system alerta, asistencia, evaluacion;
+	<template>
+		<name>Evaluacion</name>
+		<parameter>bool &amp;iniciarEval, int &amp;numEval</parameter>
+		<declaration>clock t;</declaration>
+		<location id="id21" x="-136" y="17">
+			<name x="-146" y="-17">Creado</name>
+		</location>
+		<location id="id22" x="17" y="17">
+			<name x="7" y="-17">Proceso</name>
+		</location>
+		<location id="id23" x="136" y="17">
+			<name x="126" y="-17">Finalizado</name>
+		</location>
+		<init ref="id21"/>
+		<transition id="id24">
+			<source ref="id21"/>
+			<target ref="id22"/>
+			<label kind="guard" x="-144" y="34">iniciarEval == true</label>
+			<label kind="assignment" x="-144" y="51">iniciarEval = false</label>
+		</transition>
+		<transition id="id25">
+			<source ref="id22"/>
+			<target ref="id23"/>
+			<label kind="assignment" x="42" y="34">numEval++,
+iniciarEval = true</label>
+		</transition>
+	</template>
+	<system>int numAsis = 0; //numero de asistencias completadas
+int numEval = 0; //numero de evaluaciones completadas
+int minPro = 6; //numero minimo a procesar en total
+bool iniciarAsis = false; 
+bool iniciarEval = false;
+bool iniciarAlerta = false;
+bool terminoAlerta = false;
+
+asistencia1 = Asistencia(iniciarAsis,numAsis);
+asistencia2 = Asistencia(iniciarAsis,numAsis);
+asistencia3 = Asistencia(iniciarAsis,numAsis);
+evaluacion1 = Evaluacion(iniciarEval,numEval);
+evaluacion2 = Evaluacion(iniciarEval,numEval);
+evaluacion3 = Evaluacion(iniciarEval,numEval);
+alerta = Alerta(iniciarAlerta, terminoAlerta);
+monitor = Monitor(iniciarEval, iniciarAsis, numEval, numAsis, iniciarAlerta, terminoAlerta);
+
+// Lista de ejecuciones
+system asistencia1, asistencia2, asistencia3, evaluacion1, evaluacion2, evaluacion3, alerta, monitor;
 </system>
 	<queries>
 		<query>
