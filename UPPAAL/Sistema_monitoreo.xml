@@ -6,7 +6,7 @@
 	<template>
 		<name x="5" y="5">Alerta</name>
 		<declaration>// Place local declarations here.
-</declaration>
+clock t;</declaration>
 		<location id="id0" x="-178" y="0">
 			<name x="-188" y="-34">Creado</name>
 		</location>
@@ -35,6 +35,7 @@
 	</template>
 	<template>
 		<name>Asistencia</name>
+		<declaration>clock t;</declaration>
 		<location id="id7" x="-136" y="17">
 			<name x="-146" y="-17">Creado</name>
 		</location>
@@ -56,6 +57,7 @@
 	</template>
 	<template>
 		<name>Evaluacion</name>
+		<declaration>clock t;</declaration>
 		<location id="id12" x="-136" y="8">
 			<name x="-146" y="-26">Creado</name>
 		</location>
