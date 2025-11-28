@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+</declaration>
+	<template>
+		<name x="5" y="5">Alerta</name>
+		<declaration>// Place local declarations here.
+</declaration>
+		<location id="id0" x="-178" y="0">
+			<name x="-188" y="-34">Creado</name>
+		</location>
+		<location id="id1" x="-42" y="0">
+			<name x="-52" y="-34">Pendiente</name>
+		</location>
+		<location id="id2" x="127" y="68">
+			<name x="117" y="34">Concluido</name>
+		</location>
+		<location id="id3" x="127" y="-85">
+			<name x="117" y="-119">Archivado</name>
+		</location>
+		<init ref="id0"/>
+		<transition id="id4">
+			<source ref="id1"/>
+			<target ref="id2"/>
+		</transition>
+		<transition id="id5">
+			<source ref="id1"/>
+			<target ref="id3"/>
+		</transition>
+		<transition id="id6">
+			<source ref="id0"/>
+			<target ref="id1"/>
+		</transition>
+	</template>
+	<template>
+		<name>Asistencia</name>
+		<location id="id7" x="-136" y="17">
+			<name x="-146" y="-17">Creado</name>
+		</location>
+		<location id="id8" x="-8" y="17">
+			<name x="-18" y="-17">Proceso</name>
+		</location>
+		<location id="id9" x="127" y="17">
+			<name x="117" y="-17">Finalizado</name>
+		</location>
+		<init ref="id7"/>
+		<transition id="id10">
+			<source ref="id8"/>
+			<target ref="id9"/>
+		</transition>
+		<transition id="id11">
+			<source ref="id7"/>
+			<target ref="id8"/>
+		</transition>
+	</template>
+	<template>
+		<name>Evaluacion</name>
+		<location id="id12" x="-136" y="8">
+			<name x="-146" y="-26">Creado</name>
+		</location>
+		<location id="id13" x="0" y="8">
+			<name x="-10" y="-26">Proceso</name>
+		</location>
+		<location id="id14" x="144" y="8">
+			<name x="134" y="-26">Finalizado</name>
+		</location>
+		<init ref="id12"/>
+		<transition id="id15">
+			<source ref="id12"/>
+			<target ref="id13"/>
+		</transition>
+		<transition id="id16">
+			<source ref="id13"/>
+			<target ref="id14"/>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+alerta = Alerta();
+asistencia = Asistencia();
+evaluacion = Evaluacion();
+// List one or more processes to be composed into a system.
+system alerta, asistencia, evaluacion;
+</system>
+	<queries>
+		<query>
+			<formula/>
+			<comment/>
+		</query>
+	</queries>
+</nta>
