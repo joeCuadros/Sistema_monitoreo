@@ -2,7 +2,13 @@
 
 
 ## Verificacion por VDM++
-Codigo para hacer la prueba
+Version usada: UPPAAL 9.0.7
+
+Importar a VDM++:
+1. Hacer clic en Project > Load Project
+2. Importar el archivo: Sistema_monitoreo.prj (Carpeta VDM++)
+
+**Ejecutar pruebas**
 ```vpp
 tcov reset
 create test := new Test()
@@ -100,4 +106,4 @@ Version usada: UPPAAL 5.0.0
 
 Importar a UPPAAL:
 1. Hacer clic en File > Open System
-2. Importar el xml: [descargar aqui](./UPPAAL/Sistema_monitoreo.xml?raw=1)
+2. Importar el archivo: Sistema_monitoreo.xml (Carpeta UPPAAL)
