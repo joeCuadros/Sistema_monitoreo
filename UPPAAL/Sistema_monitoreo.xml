@@ -21,18 +21,24 @@
 		</location>
 		<init ref="id0"/>
 		<transition id="id4">
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<nail x="-76" y="-136"/>
+			<nail x="-263" y="-136"/>
+		</transition>
+		<transition id="id5">
 			<source ref="id2"/>
 			<target ref="id3"/>
 			<label kind="guard" x="-153" y="-34">terminoAlerta == true</label>
 		</transition>
-		<transition id="id5">
+		<transition id="id6">
 			<source ref="id1"/>
 			<target ref="id2"/>
 			<label kind="guard" x="-289" y="-34">numEval&gt;=3 &amp;&amp; 
 numAsis&gt;=3</label>
 			<label kind="assignment" x="-289" y="0">iniciarAlerta = true</label>
 		</transition>
-		<transition id="id6">
+		<transition id="id7">
 			<source ref="id0"/>
 			<target ref="id1"/>
 			<label kind="assignment" x="-467" y="-34">iniciarEval = true,
@@ -43,65 +49,65 @@ iniciarAsis = true</label>
 		<name x="5" y="5">Alerta</name>
 		<parameter>bool &amp;iniciarAlerta, bool &amp;terminoAlerta</parameter>
 		<declaration>clock t;</declaration>
-		<location id="id7" x="-153" y="0">
+		<location id="id8" x="-153" y="0">
 			<name x="-178" y="17">Creado</name>
 		</location>
-		<location id="id8" x="-42" y="0">
+		<location id="id9" x="-42" y="0">
 			<name x="-85" y="17">Pendiente</name>
 		</location>
-		<location id="id9" x="127" y="68">
+		<location id="id10" x="127" y="68">
 			<name x="110" y="85">Concluido</name>
 		</location>
-		<location id="id10" x="127" y="-85">
+		<location id="id11" x="127" y="-85">
 			<name x="110" y="-119">Archivado</name>
 		</location>
-		<location id="id11" x="-153" y="-93">
+		<location id="id12" x="-153" y="-93">
 			<name x="-195" y="-127">NoExistente</name>
 		</location>
-		<init ref="id11"/>
-		<transition id="id12">
-			<source ref="id11"/>
-			<target ref="id7"/>
+		<init ref="id12"/>
+		<transition id="id13">
+			<source ref="id12"/>
+			<target ref="id8"/>
 			<label kind="guard" x="-255" y="-68">iniciarAlerta == true</label>
 		</transition>
-		<transition id="id13">
-			<source ref="id8"/>
-			<target ref="id9"/>
+		<transition id="id14">
+			<source ref="id9"/>
+			<target ref="id10"/>
 			<label kind="assignment" x="34" y="8">terminoAlerta = true</label>
 		</transition>
-		<transition id="id14">
-			<source ref="id8"/>
-			<target ref="id10"/>
+		<transition id="id15">
+			<source ref="id9"/>
+			<target ref="id11"/>
 			<label kind="assignment" x="34" y="-42">terminoAlerta = true</label>
 		</transition>
-		<transition id="id15">
-			<source ref="id7"/>
-			<target ref="id8"/>
+		<transition id="id16">
+			<source ref="id8"/>
+			<target ref="id9"/>
 		</transition>
 	</template>
 	<template>
 		<name>Asistencia</name>
 		<parameter>bool &amp;iniciarAsis, int &amp;numAsis</parameter>
 		<declaration>clock t;</declaration>
-		<location id="id16" x="-136" y="17">
+		<location id="id17" x="-136" y="17">
 			<name x="-146" y="-17">Creado</name>
 		</location>
-		<location id="id17" x="17" y="17">
+		<location id="id18" x="17" y="17">
 			<name x="7" y="-17">Proceso</name>
 		</location>
-		<location id="id18" x="136" y="17">
+		<location id="id19" x="136" y="17">
 			<name x="126" y="-17">Finalizado</name>
 		</location>
-		<init ref="id16"/>
-		<transition id="id19">
-			<source ref="id17"/>
-			<target ref="id18"/>
+		<init ref="id17"/>
+		<transition id="id20">
+			<source ref="id18"/>
+			<target ref="id19"/>
 			<label kind="assignment" x="42" y="34">numAsis++,
 iniciarAsis = true</label>
 		</transition>
-		<transition id="id20">
-			<source ref="id16"/>
-			<target ref="id17"/>
+		<transition id="id21">
+			<source ref="id17"/>
+			<target ref="id18"/>
 			<label kind="guard" x="-144" y="34">iniciarAsis == true</label>
 			<label kind="assignment" x="-144" y="51">iniciarAsis = false</label>
 		</transition>
@@ -110,25 +116,25 @@ iniciarAsis = true</label>
 		<name>Evaluacion</name>
 		<parameter>bool &amp;iniciarEval, int &amp;numEval</parameter>
 		<declaration>clock t;</declaration>
-		<location id="id21" x="-136" y="17">
+		<location id="id22" x="-136" y="17">
 			<name x="-146" y="-17">Creado</name>
 		</location>
-		<location id="id22" x="17" y="17">
+		<location id="id23" x="17" y="17">
 			<name x="7" y="-17">Proceso</name>
 		</location>
-		<location id="id23" x="136" y="17">
+		<location id="id24" x="136" y="17">
 			<name x="126" y="-17">Finalizado</name>
 		</location>
-		<init ref="id21"/>
-		<transition id="id24">
-			<source ref="id21"/>
-			<target ref="id22"/>
-			<label kind="guard" x="-144" y="34">iniciarEval == true</label>
-			<label kind="assignment" x="-144" y="51">iniciarEval = false</label>
-		</transition>
+		<init ref="id22"/>
 		<transition id="id25">
 			<source ref="id22"/>
 			<target ref="id23"/>
+			<label kind="guard" x="-144" y="34">iniciarEval == true</label>
+			<label kind="assignment" x="-144" y="51">iniciarEval = false</label>
+		</transition>
+		<transition id="id26">
+			<source ref="id23"/>
+			<target ref="id24"/>
 			<label kind="assignment" x="42" y="34">numEval++,
 iniciarEval = true</label>
 		</transition>
@@ -155,8 +161,64 @@ system asistencia1, asistencia2, asistencia3, evaluacion1, evaluacion2, evaluaci
 </system>
 	<queries>
 		<query>
-			<formula/>
-			<comment/>
+			<formula>E&lt;&gt; (monitor.Finalizado &amp;&amp; alerta.Concluido)</formula>
+			<comment>Verifica que existe un camino donde el monitor llega a estado Finalizado y la alerta se concluye exitosamente</comment>
+			<result outcome="success" type="quality" timestamp="2025-11-28 16:44:25 -0500">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (monitor.Finalizado &amp;&amp; alerta.Archivado)</formula>
+			<comment>Verifica que existe un camino donde el monitor llega a estado Finalizado y la alerta se archiva</comment>
+			<result outcome="success" type="quality" timestamp="2025-11-28 16:44:27 -0500">
+			</result>
+		</query>
+		<query>
+			<formula>A[] (numEval &gt;= 0 &amp;&amp; numAsis &gt;= 0)</formula>
+			<comment>Verifica que en todos los estados siempre los contadores de evaluaciones y asistencias son no negativos</comment>
+			<result outcome="success" type="quality" timestamp="2025-11-28 16:44:28 -0500">
+			</result>
+		</query>
+		<query>
+			<formula>A[] (iniciarAlerta imply (numEval &gt;= 3 &amp;&amp; numAsis &gt;= 3))</formula>
+			<comment>Verifica que siempre que se inicia una alerta, se han completado al menos 3 evaluaciones y 3 asistencias</comment>
+			<result outcome="success" type="quality" timestamp="2025-11-28 16:44:29 -0500">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (numEval &gt;= 3 &amp;&amp; numAsis &gt;= 3)</formula>
+			<comment>Verifica que existe un camino donde se completan al menos 3 evaluaciones y 3 asistencias</comment>
+			<result outcome="success" type="quality" timestamp="2025-11-28 16:44:30 -0500">
+			</result>
+		</query>
+		<query>
+			<formula>A[] not deadlock</formula>
+			<comment>Verifica que el sistema nunca llega a un estado de bloqueo</comment>
+			<result outcome="success" type="quality" timestamp="2025-11-28 16:44:31 -0500">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (monitor.Procesando &amp;&amp; iniciarAlerta == true)</formula>
+			<comment>Verifica que existe un camino donde el monitor está procesando y la alerta ha sido iniciada</comment>
+			<result outcome="success" type="quality" timestamp="2025-11-28 16:44:32 -0500">
+			</result>
+		</query>
+		<query>
+			<formula>A[] (alerta.Pendiente imply iniciarAlerta == true)</formula>
+			<comment>Verifica que siempre que la alerta está pendiente, significa que fue iniciada correctamente</comment>
+			<result outcome="success" type="quality" timestamp="2025-11-28 16:44:33 -0500">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (evaluacion1.Finalizado &amp;&amp; evaluacion2.Finalizado &amp;&amp; evaluacion3.Finalizado)</formula>
+			<comment>Verifica que existe un camino donde las 3 evaluaciones se completan</comment>
+			<result outcome="success" type="quality" timestamp="2025-11-28 16:44:34 -0500">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; (asistencia1.Finalizado &amp;&amp; asistencia2.Finalizado &amp;&amp; asistencia3.Finalizado)</formula>
+			<comment>Verifica que existe un camino donde las 3 asistencias se completan</comment>
+			<result outcome="success" type="quality" timestamp="2025-11-28 16:44:36 -0500">
+			</result>
 		</query>
 	</queries>
 </nta>
