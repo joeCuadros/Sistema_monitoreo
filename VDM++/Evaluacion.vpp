@@ -47,7 +47,7 @@ public terminar: () ==> ()
 terminar() == (
   estado := <Finalizado>;
 )
-pre estado <> <Finalizado>;
+pre estado = <Proceso>;
 
 -- verficar si termino la evaluacion
 public termino: () ==> bool

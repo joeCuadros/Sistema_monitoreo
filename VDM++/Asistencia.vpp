@@ -39,7 +39,7 @@ public terminar: () ==> ()
 terminar() == (
   estado := <Finalizado>;
 )
-pre estado <> <Finalizado>;
+pre estado = <Proceso>;
 public termino: () ==> bool
 termino() == (
   return estado = <Finalizado>
